@@ -26,7 +26,7 @@ public class SecurityConfig {
         };
         return http.csrf(c -> c.disable()).cors(c -> c.configurationSource(source))
             .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(a -> a.requestMatchers(HttpMethod.GET, "/api/paypal/config").permitAll()
+            .authorizeHttpRequests(a -> a.requestMatchers(HttpMethod.GET, "/api/paypal/config", "/api/health").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/paypal/webhook").permitAll()
                 .anyRequest().authenticated())
             .exceptionHandling(e -> e.authenticationEntryPoint(entryPoint))

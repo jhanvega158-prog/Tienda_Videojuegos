@@ -1,0 +1,196 @@
+{
+    "check": "CHECK (((metodo_pago)::text = ANY ((ARRAY['PAYPHONE'::character varying, 'TARJETA'::character varying, 'TRANSFERENCIA'::character varying, 'SIMULADO'::character varying, 'PAYPAL'::character varying])::text[])))",
+    "columns": [
+        "paypal_capture_id",
+        "paypal_order_id",
+        "respuesta_proveedor"
+    ],
+    "indexes": [
+        {
+            "name": "pagos_paypal_capture_unique",
+            "definition": "CREATE UNIQUE INDEX pagos_paypal_capture_unique ON public.pagos USING btree (paypal_capture_id) WHERE (paypal_capture_id IS NOT NULL)"
+        },
+        {
+            "name": "carritos_usuario_paypal_unique",
+            "definition": "CREATE UNIQUE INDEX carritos_usuario_paypal_unique ON public.carritos USING btree (id_usuario)"
+        },
+        {
+            "name": "carrito_producto_paypal_unique",
+            "definition": "CREATE UNIQUE INDEX carrito_producto_paypal_unique ON public.carrito_detalle USING btree (id_carrito, id_videojuego)"
+        },
+        {
+            "name": "pagos_paypal_order_unique",
+            "definition": "CREATE UNIQUE INDEX pagos_paypal_order_unique ON public.pagos USING btree (paypal_order_id) WHERE (paypal_order_id IS NOT NULL)"
+        },
+        {
+            "name": "paypal_one_active_checkout",
+            "definition": "CREATE UNIQUE INDEX paypal_one_active_checkout ON public.paypal_checkouts USING btree (id_usuario) WHERE (status = ANY (ARRAY['NEW'::text, 'READY'::text, 'CAPTURING'::text, 'REVIEW'::text]))"
+        }
+    ],
+    "triggers": [
+        {
+            "name": "jjc_backend_only",
+            "table": "ordenes",
+            "enabled": "O",
+            "definition": "CREATE TRIGGER jjc_backend_only BEFORE INSERT OR DELETE OR UPDATE ON public.ordenes FOR EACH ROW EXECUTE FUNCTION jjc_backend_only()"
+        },
+        {
+            "name": "trigger_generar_numero_orden",
+            "table": "ordenes",
+            "enabled": "O",
+            "definition": "CREATE TRIGGER trigger_generar_numero_orden BEFORE INSERT ON public.ordenes FOR EACH ROW EXECUTE FUNCTION generar_numero_orden()"
+        },
+        {
+            "name": "jjc_backend_only",
+            "table": "orden_detalle",
+            "enabled": "O",
+            "definition": "CREATE TRIGGER jjc_backend_only BEFORE INSERT OR DELETE OR UPDATE ON public.orden_detalle FOR EACH ROW EXECUTE FUNCTION jjc_backend_only()"
+        },
+        {
+            "name": "jjc_backend_only",
+            "table": "pagos",
+            "enabled": "O",
+            "definition": "CREATE TRIGGER jjc_backend_only BEFORE INSERT OR DELETE OR UPDATE ON public.pagos FOR EACH ROW EXECUTE FUNCTION jjc_backend_only()"
+        },
+        {
+            "name": "jjc_paypal_audit",
+            "table": "pagos",
+            "enabled": "O",
+            "definition": "CREATE TRIGGER jjc_paypal_audit AFTER INSERT OR UPDATE ON public.pagos FOR EACH ROW EXECUTE FUNCTION jjc_paypal_audit()"
+        },
+        {
+            "name": "trigger_auditoria_pago",
+            "table": "pagos",
+            "enabled": "O",
+            "definition": "CREATE TRIGGER trigger_auditoria_pago AFTER UPDATE OF estado ON public.pagos FOR EACH ROW WHEN (((new.proveedor)::text IS DISTINCT FROM 'PAYPAL'::text)) EXECUTE FUNCTION registrar_cambio_estado_pago()"
+        },
+        {
+            "name": "trigger_generar_referencia_pago",
+            "table": "pagos",
+            "enabled": "O",
+            "definition": "CREATE TRIGGER trigger_generar_referencia_pago BEFORE INSERT ON public.pagos FOR EACH ROW EXECUTE FUNCTION generar_referencia_pago()"
+        },
+        {
+            "name": "trigger_procesar_pago_aprobado",
+            "table": "pagos",
+            "enabled": "O",
+            "definition": "CREATE TRIGGER trigger_procesar_pago_aprobado BEFORE UPDATE OF estado ON public.pagos FOR EACH ROW WHEN (((new.proveedor)::text IS DISTINCT FROM 'PAYPAL'::text)) EXECUTE FUNCTION procesar_pago_aprobado()"
+        },
+        {
+            "name": "jjc_backend_only",
+            "table": "biblioteca",
+            "enabled": "O",
+            "definition": "CREATE TRIGGER jjc_backend_only BEFORE INSERT OR DELETE OR UPDATE ON public.biblioteca FOR EACH ROW EXECUTE FUNCTION jjc_backend_only()"
+        },
+        {
+            "name": "jjc_backend_only",
+            "table": "auditoria_pagos",
+            "enabled": "O",
+            "definition": "CREATE TRIGGER jjc_backend_only BEFORE INSERT OR DELETE OR UPDATE ON public.auditoria_pagos FOR EACH ROW EXECUTE FUNCTION jjc_backend_only()"
+        },
+        {
+            "name": "jjc_backend_only",
+            "table": "paypal_checkouts",
+            "enabled": "O",
+            "definition": "CREATE TRIGGER jjc_backend_only BEFORE INSERT OR DELETE OR UPDATE ON public.paypal_checkouts FOR EACH ROW EXECUTE FUNCTION jjc_backend_only()"
+        },
+        {
+            "name": "jjc_backend_only",
+            "table": "paypal_checkout_items",
+            "enabled": "O",
+            "definition": "CREATE TRIGGER jjc_backend_only BEFORE INSERT OR DELETE OR UPDATE ON public.paypal_checkout_items FOR EACH ROW EXECUTE FUNCTION jjc_backend_only()"
+        },
+        {
+            "name": "jjc_backend_only",
+            "table": "paypal_cart_imports",
+            "enabled": "O",
+            "definition": "CREATE TRIGGER jjc_backend_only BEFORE INSERT OR DELETE OR UPDATE ON public.paypal_cart_imports FOR EACH ROW EXECUTE FUNCTION jjc_backend_only()"
+        }
+    ],
+    "admin_policies": [
+        {
+            "qual": "es_admin()",
+            "table": "ordenes",
+            "command": "SELECT"
+        },
+        {
+            "qual": "es_admin()",
+            "table": "orden_detalle",
+            "command": "SELECT"
+        },
+        {
+            "qual": "es_admin()",
+            "table": "pagos",
+            "command": "SELECT"
+        },
+        {
+            "qual": "es_admin()",
+            "table": "auditoria_pagos",
+            "command": "SELECT"
+        }
+    ],
+    "private_tables": [
+        {
+            "rls": true,
+            "name": "paypal_cart_imports",
+            "anon_select": false,
+            "authenticated_select": false
+        },
+        {
+            "rls": true,
+            "name": "paypal_checkout_items",
+            "anon_select": false,
+            "authenticated_select": false
+        },
+        {
+            "rls": true,
+            "name": "paypal_checkouts",
+            "anon_select": false,
+            "authenticated_select": false
+        },
+        {
+            "rls": true,
+            "name": "paypal_schema_version",
+            "anon_select": false,
+            "authenticated_select": false
+        }
+    ],
+    "version_exists": true,
+    "financial_grants": [
+        {
+            "table": "ordenes",
+            "anon_insert": false,
+            "authenticated_delete": false,
+            "authenticated_insert": false,
+            "authenticated_update": false
+        },
+        {
+            "table": "orden_detalle",
+            "anon_insert": false,
+            "authenticated_delete": false,
+            "authenticated_insert": false,
+            "authenticated_update": false
+        },
+        {
+            "table": "pagos",
+            "anon_insert": false,
+            "authenticated_delete": false,
+            "authenticated_insert": false,
+            "authenticated_update": false
+        },
+        {
+            "table": "biblioteca",
+            "anon_insert": false,
+            "authenticated_delete": false,
+            "authenticated_insert": false,
+            "authenticated_update": false
+        },
+        {
+            "table": "auditoria_pagos",
+            "anon_insert": false,
+            "authenticated_delete": false,
+            "authenticated_insert": false,
+            "authenticated_update": false
+        }
+    ]
+}

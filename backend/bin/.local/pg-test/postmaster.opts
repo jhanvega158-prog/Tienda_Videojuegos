@@ -1,0 +1,1 @@
+C:/Program Files/PostgreSQL/17/bin/postgres.exe "-D" "backend/.local/pg-test" "-p" "55432" "-h" "127.0.0.1"

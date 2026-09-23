@@ -1,0 +1,27 @@
+server:
+  port: ${PORT:8080}
+  error:
+    include-message: never
+    include-stacktrace: never
+spring:
+  application:
+    name: jjc-payments
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    hikari:
+      maximum-pool-size: 8
+      connection-timeout: 10000
+  sql:
+    init:
+      mode: never
+jjc:
+  frontend-url: ${FRONTEND_URL:http://localhost:4200}
+  supabase-url: ${SUPABASE_URL}
+  supabase-publishable-key: ${SUPABASE_PUBLISHABLE_KEY}
+  paypal:
+    client-id: ${PAYPAL_CLIENT_ID}
+    client-secret: ${PAYPAL_CLIENT_SECRET}
+    mode: ${PAYPAL_MODE:sandbox}
+    webhook-id: ${PAYPAL_WEBHOOK_ID:}

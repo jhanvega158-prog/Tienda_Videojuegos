@@ -1,0 +1,1030 @@
+2026-09-22 22:02:06.542 -05 [25440] LOG:  starting PostgreSQL 17.10 on x86_64-windows, compiled by msvc-19.44.35227, 64-bit
+2026-09-22 22:02:06.543 -05 [25440] LOG:  listening on IPv4 address "127.0.0.1", port 55432
+2026-09-22 22:02:06.613 -05 [6984] LOG:  database system was shut down at 2026-09-22 22:00:45 -05
+2026-09-22 22:02:06.650 -05 [25440] LOG:  database system is ready to accept connections
+2026-09-22 22:05:20.211 -05 [17960] ERROR:  Trigger no revisado: unexpected en ordenes, función unexpected. Revisar con docs/paypal-inspection.sql antes de adaptar esta migración.
+2026-09-22 22:05:20.211 -05 [17960] CONTEXT:  PL/pgSQL function inline_code_block line 23 at RAISE
+2026-09-22 22:05:20.211 -05 [17960] STATEMENT:  
+	
+	-- Una única fuente de fulfillment: PaymentService transaccional.
+	-- Conservar función y trigger anteriores para proveedores históricos, excluyendo SOLO PAYPAL.
+	-- Cualquier otro trigger de negocio requiere inspección, no se ignora ni se deshabilita.
+	do $$
+	declare t record; ddl text;
+	begin
+	 for t in select tr.*,p.proname,p.prosrc,pg_get_triggerdef(tr.oid) as definition
+	   from pg_trigger tr join pg_proc p on p.oid=tr.tgfoid
+	   where not tr.tgisinternal and tr.tgrelid in
+	    ('public.pagos'::regclass,'public.ordenes'::regclass,'public.orden_detalle'::regclass,
+	     'public.videojuegos'::regclass,'public.biblioteca'::regclass,'public.carrito_detalle'::regclass)
+	 loop
+	   if t.proname in ('jjc_backend_only','jjc_paypal_audit') then continue; end if;
+	   if t.proname='procesar_pago_aprobado' and t.tgrelid='public.pagos'::regclass and (t.tgtype & 1)=1 then
+	     if t.definition like '%IS DISTINCT FROM ''PAYPAL''%' then continue; end if;
+	     if t.definition like '% WHEN (%' then
+	       ddl := regexp_replace(t.definition,' WHEN \((.*)\) EXECUTE FUNCTION ',
+	         ' WHEN ((\1) AND (NEW.proveedor IS DISTINCT FROM ''PAYPAL'')) EXECUTE FUNCTION ');
+	     else
+	       ddl := replace(t.definition,' EXECUTE FUNCTION ', ' WHEN (NEW.proveedor IS DISTINCT FROM ''PAYPAL'') EXECUTE FUNCTION ');
+	     end if;
+	     if ddl=t.definition then raise exception 'No se pudo adaptar el trigger %',t.tgname; end if;
+	     execute format('drop trigger %I on public.pagos',t.tgname);
+	     execute ddl;
+	   else
+	     raise exception 'Trigger no revisado: % en %, función %. Revisar con docs/paypal-inspection.sql antes de adaptar esta migración.',
+	       t.tgname,t.tgrelid::regclass,t.proname;
+	   end if;
+	 end loop;
+	end $$
+2026-09-22 22:05:25.600 -05 [15624] ERROR:  Operación reservada al backend de pagos
+2026-09-22 22:05:25.600 -05 [15624] CONTEXT:  PL/pgSQL function jjc_backend_only() line 4 at RAISE
+	SQL function "forge" statement 1
+2026-09-22 22:05:25.600 -05 [15624] STATEMENT:  select public.forge()
+2026-09-22 22:05:27.356 -05 [25400] ERROR:  new row for relation "biblioteca" violates check constraint "reject_fixture"
+2026-09-22 22:05:27.356 -05 [25400] DETAIL:  Failing row contains (1, 1, 1, 1, 2026-09-22 22:05:27.339815-05).
+2026-09-22 22:05:27.356 -05 [25400] STATEMENT:  insert into public.biblioteca(id_usuario,id_videojuego,id_orden)
+	select $1,$2,$3 where not exists(select 1 from public.biblioteca where id_usuario=$4 and id_videojuego=$5)
+	
+2026-09-22 22:07:06.610 -05 [24676] LOG:  checkpoint starting: time
+2026-09-22 22:08:51.599 -05 [2444] ERROR:  Trigger no revisado: unexpected en ordenes, función unexpected. Revisar con docs/paypal-inspection.sql antes de adaptar esta migración.
+2026-09-22 22:08:51.599 -05 [2444] CONTEXT:  PL/pgSQL function inline_code_block line 23 at RAISE
+2026-09-22 22:08:51.599 -05 [2444] STATEMENT:  
+	
+	-- Una única fuente de fulfillment: PaymentService transaccional.
+	-- Conservar función y trigger anteriores para proveedores históricos, excluyendo SOLO PAYPAL.
+	-- Cualquier otro trigger de negocio requiere inspección, no se ignora ni se deshabilita.
+	do $$
+	declare t record; ddl text;
+	begin
+	 for t in select tr.*,p.proname,p.prosrc,pg_get_triggerdef(tr.oid) as definition
+	   from pg_trigger tr join pg_proc p on p.oid=tr.tgfoid
+	   where not tr.tgisinternal and tr.tgrelid in
+	    ('public.pagos'::regclass,'public.ordenes'::regclass,'public.orden_detalle'::regclass,
+	     'public.videojuegos'::regclass,'public.biblioteca'::regclass,'public.carrito_detalle'::regclass)
+	 loop
+	   if t.proname in ('jjc_backend_only','jjc_paypal_audit') then continue; end if;
+	   if t.proname='procesar_pago_aprobado' and t.tgrelid='public.pagos'::regclass and (t.tgtype & 1)=1 then
+	     if t.definition like '%IS DISTINCT FROM ''PAYPAL''%' then continue; end if;
+	     if t.definition like '% WHEN (%' then
+	       ddl := regexp_replace(t.definition,' WHEN \((.*)\) EXECUTE FUNCTION ',
+	         ' WHEN ((\1) AND (NEW.proveedor IS DISTINCT FROM ''PAYPAL'')) EXECUTE FUNCTION ');
+	     else
+	       ddl := replace(t.definition,' EXECUTE FUNCTION ', ' WHEN (NEW.proveedor IS DISTINCT FROM ''PAYPAL'') EXECUTE FUNCTION ');
+	     end if;
+	     if ddl=t.definition then raise exception 'No se pudo adaptar el trigger %',t.tgname; end if;
+	     execute format('drop trigger %I on public.pagos',t.tgname);
+	     execute ddl;
+	   else
+	     raise exception 'Trigger no revisado: % en %, función %. Revisar con docs/paypal-inspection.sql antes de adaptar esta migración.',
+	       t.tgname,t.tgrelid::regclass,t.proname;
+	   end if;
+	 end loop;
+	end $$
+2026-09-22 22:08:56.325 -05 [23908] ERROR:  Operación reservada al backend de pagos
+2026-09-22 22:08:56.325 -05 [23908] CONTEXT:  PL/pgSQL function jjc_backend_only() line 4 at RAISE
+	SQL function "forge" statement 1
+2026-09-22 22:08:56.325 -05 [23908] STATEMENT:  select public.forge()
+2026-09-22 22:08:57.776 -05 [21648] ERROR:  new row for relation "biblioteca" violates check constraint "reject_fixture"
+2026-09-22 22:08:57.776 -05 [21648] DETAIL:  Failing row contains (1, 1, 1, 1, 2026-09-22 22:08:57.765027-05).
+2026-09-22 22:08:57.776 -05 [21648] STATEMENT:  insert into public.biblioteca(id_usuario,id_videojuego,id_orden)
+	select $1,$2,$3 where not exists(select 1 from public.biblioteca where id_usuario=$4 and id_videojuego=$5)
+	
+2026-09-22 22:09:35.753 -05 [24676] LOG:  checkpoint complete: wrote 1300 buffers (7.9%); 0 WAL file(s) added, 0 removed, 0 recycled; write=148.223 s, sync=0.720 s, total=149.143 s; sync files=1555, longest=0.051 s, average=0.001 s; distance=9690 kB, estimate=9690 kB; lsn=0/2449DF0, redo lsn=0/1EE8DE0
+2026-09-22 22:11:20.529 -05 [10096] ERROR:  Trigger no revisado: unexpected en ordenes, función unexpected. Revisar con docs/paypal-inspection.sql antes de adaptar esta migración.
+2026-09-22 22:11:20.529 -05 [10096] CONTEXT:  PL/pgSQL function inline_code_block line 23 at RAISE
+2026-09-22 22:11:20.529 -05 [10096] STATEMENT:  
+	
+	-- Una única fuente de fulfillment: PaymentService transaccional.
+	-- Conservar función y trigger anteriores para proveedores históricos, excluyendo SOLO PAYPAL.
+	-- Cualquier otro trigger de negocio requiere inspección, no se ignora ni se deshabilita.
+	do $$
+	declare t record; ddl text;
+	begin
+	 for t in select tr.*,p.proname,p.prosrc,pg_get_triggerdef(tr.oid) as definition
+	   from pg_trigger tr join pg_proc p on p.oid=tr.tgfoid
+	   where not tr.tgisinternal and tr.tgrelid in
+	    ('public.pagos'::regclass,'public.ordenes'::regclass,'public.orden_detalle'::regclass,
+	     'public.videojuegos'::regclass,'public.biblioteca'::regclass,'public.carrito_detalle'::regclass)
+	 loop
+	   if t.proname in ('jjc_backend_only','jjc_paypal_audit') then continue; end if;
+	   if t.proname='procesar_pago_aprobado' and t.tgrelid='public.pagos'::regclass and (t.tgtype & 1)=1 then
+	     if t.definition like '%IS DISTINCT FROM ''PAYPAL''%' then continue; end if;
+	     if t.definition like '% WHEN (%' then
+	       ddl := regexp_replace(t.definition,' WHEN \((.*)\) EXECUTE FUNCTION ',
+	         ' WHEN ((\1) AND (NEW.proveedor IS DISTINCT FROM ''PAYPAL'')) EXECUTE FUNCTION ');
+	     else
+	       ddl := replace(t.definition,' EXECUTE FUNCTION ', ' WHEN (NEW.proveedor IS DISTINCT FROM ''PAYPAL'') EXECUTE FUNCTION ');
+	     end if;
+	     if ddl=t.definition then raise exception 'No se pudo adaptar el trigger %',t.tgname; end if;
+	     execute format('drop trigger %I on public.pagos',t.tgname);
+	     execute ddl;
+	   else
+	     raise exception 'Trigger no revisado: % en %, función %. Revisar con docs/paypal-inspection.sql antes de adaptar esta migración.',
+	       t.tgname,t.tgrelid::regclass,t.proname;
+	   end if;
+	 end loop;
+	end $$
+2026-09-22 22:11:26.552 -05 [11988] ERROR:  Operación reservada al backend de pagos
+2026-09-22 22:11:26.552 -05 [11988] CONTEXT:  PL/pgSQL function jjc_backend_only() line 4 at RAISE
+	SQL function "forge" statement 1
+2026-09-22 22:11:26.552 -05 [11988] STATEMENT:  select public.forge()
+2026-09-22 22:11:28.242 -05 [23392] ERROR:  new row for relation "biblioteca" violates check constraint "reject_fixture"
+2026-09-22 22:11:28.242 -05 [23392] DETAIL:  Failing row contains (1, 1, 1, 1, 2026-09-22 22:11:28.225622-05).
+2026-09-22 22:11:28.242 -05 [23392] STATEMENT:  insert into public.biblioteca(id_usuario,id_videojuego,id_orden)
+	select $1,$2,$3 where not exists(select 1 from public.biblioteca where id_usuario=$4 and id_videojuego=$5)
+	
+2026-09-22 22:12:06.772 -05 [24676] LOG:  checkpoint starting: time
+2026-09-22 22:13:22.280 -05 [24676] LOG:  checkpoint complete: wrote 689 buffers (4.2%); 0 WAL file(s) added, 0 removed, 1 recycled; write=74.664 s, sync=0.462 s, total=75.509 s; sync files=1039, longest=0.052 s, average=0.001 s; distance=12918 kB, estimate=12918 kB; lsn=0/2BAA5D0, redo lsn=0/2B86710
+2026-09-22 23:34:23.329 -05 [11112] ERROR:  Trigger no revisado: unexpected en ordenes, función unexpected. Revisar con docs/paypal-inspection.sql antes de adaptar esta migración.
+2026-09-22 23:34:23.329 -05 [11112] CONTEXT:  PL/pgSQL function inline_code_block line 23 at RAISE
+2026-09-22 23:34:23.329 -05 [11112] STATEMENT:  
+	
+	-- Una única fuente de fulfillment: PaymentService transaccional.
+	-- Conservar función y trigger anteriores para proveedores históricos, excluyendo SOLO PAYPAL.
+	-- Cualquier otro trigger de negocio requiere inspección, no se ignora ni se deshabilita.
+	do $$
+	declare t record; ddl text;
+	begin
+	 for t in select tr.*,p.proname,p.prosrc,pg_get_triggerdef(tr.oid) as definition
+	   from pg_trigger tr join pg_proc p on p.oid=tr.tgfoid
+	   where not tr.tgisinternal and tr.tgrelid in
+	    ('public.pagos'::regclass,'public.ordenes'::regclass,'public.orden_detalle'::regclass,
+	     'public.videojuegos'::regclass,'public.biblioteca'::regclass,'public.carrito_detalle'::regclass)
+	 loop
+	   if t.proname in ('jjc_backend_only','jjc_paypal_audit') then continue; end if;
+	   if t.proname='procesar_pago_aprobado' and t.tgrelid='public.pagos'::regclass and (t.tgtype & 1)=1 then
+	     if t.definition like '%IS DISTINCT FROM ''PAYPAL''%' then continue; end if;
+	     if t.definition like '% WHEN (%' then
+	       ddl := regexp_replace(t.definition,' WHEN \((.*)\) EXECUTE FUNCTION ',
+	         ' WHEN ((\1) AND (NEW.proveedor IS DISTINCT FROM ''PAYPAL'')) EXECUTE FUNCTION ');
+	     else
+	       ddl := replace(t.definition,' EXECUTE FUNCTION ', ' WHEN (NEW.proveedor IS DISTINCT FROM ''PAYPAL'') EXECUTE FUNCTION ');
+	     end if;
+	     if ddl=t.definition then raise exception 'No se pudo adaptar el trigger %',t.tgname; end if;
+	     execute format('drop trigger %I on public.pagos',t.tgname);
+	     execute ddl;
+	   else
+	     raise exception 'Trigger no revisado: % en %, función %. Revisar con docs/paypal-inspection.sql antes de adaptar esta migración.',
+	       t.tgname,t.tgrelid::regclass,t.proname;
+	   end if;
+	 end loop;
+	end $$
+2026-09-22 23:34:28.088 -05 [4120] ERROR:  Operación reservada al backend de pagos
+2026-09-22 23:34:28.088 -05 [4120] CONTEXT:  PL/pgSQL function jjc_backend_only() line 4 at RAISE
+	SQL function "forge" statement 1
+2026-09-22 23:34:28.088 -05 [4120] STATEMENT:  select public.forge()
+2026-09-22 23:34:29.311 -05 [27944] ERROR:  new row for relation "biblioteca" violates check constraint "reject_fixture"
+2026-09-22 23:34:29.311 -05 [27944] DETAIL:  Failing row contains (1, 1, 1, 1, 2026-09-22 23:34:29.291746-05).
+2026-09-22 23:34:29.311 -05 [27944] STATEMENT:  insert into public.biblioteca(id_usuario,id_videojuego,id_orden)
+	select $1,$2,$3 where not exists(select 1 from public.biblioteca where id_usuario=$4 and id_videojuego=$5)
+	
+2026-09-22 23:36:30.400 -05 [25440] LOG:  received fast shutdown request
+2026-09-22 23:36:30.452 -05 [25440] LOG:  aborting any active transactions
+2026-09-22 23:36:30.469 -05 [25440] LOG:  background worker "logical replication launcher" (PID 11652) exited with exit code 1
+2026-09-22 23:36:30.471 -05 [24676] LOG:  shutting down
+2026-09-22 23:36:30.474 -05 [24676] LOG:  checkpoint starting: shutdown immediate
+2026-09-22 23:36:31.250 -05 [24676] LOG:  checkpoint complete: wrote 595 buffers (3.6%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.022 s, sync=0.492 s, total=0.780 s; sync files=1039, longest=0.009 s, average=0.001 s; distance=8097 kB, estimate=12436 kB; lsn=0/336EE60, redo lsn=0/336EE60
+2026-09-22 23:36:31.279 -05 [25440] LOG:  database system is shut down
+2026-09-22 23:55:31.175 -05 [12552] LOG:  starting PostgreSQL 17.10 on x86_64-windows, compiled by msvc-19.44.35227, 64-bit
+2026-09-22 23:55:31.176 -05 [12552] LOG:  listening on IPv4 address "127.0.0.1", port 55432
+2026-09-22 23:55:31.273 -05 [11976] LOG:  database system was shut down at 2026-09-22 23:36:30 -05
+2026-09-22 23:55:31.316 -05 [12552] LOG:  database system is ready to accept connections
+2026-09-22 23:56:06.023 -05 [26932] ERROR:  CHECK chk_metodo_pago no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: (metodo_pago = ANY (ARRAY[('PAYPHONE'::character varying)::text, ('TARJETA'::character varying)::text, ('TRANSFERENCIA'::character varying)::text, ('SIMULADO'::character varying)::text]))
+2026-09-22 23:56:06.023 -05 [26932] CONTEXT:  PL/pgSQL function inline_code_block line 14 at RAISE
+2026-09-22 23:56:06.023 -05 [26932] STATEMENT:  
+	
+	-- Verificar el resto de constraints de proveedor/método sin alterarlos.
+	-- Si un CHECK excluye PAYPAL, aborta con su nombre para que el operador lo amplíe conservando los valores anteriores.
+	do $$
+	declare c record; ok boolean;
+	begin
+	 for c in select conname,pg_get_expr(conbin,conrelid) as expr from pg_constraint
+	   where conrelid='public.pagos'::regclass and contype='c'
+	 loop
+	   if c.expr ~ '(proveedor|metodo_pago)' then
+	     begin
+	       execute 'select (' || c.expr || ') from (select ''PAYPAL''::text as proveedor,''PAYPAL''::text as metodo_pago) x' into ok;
+	     exception when others then
+	       raise exception 'Revisar CHECK %: %; no se modificó automáticamente',c.conname,c.expr;
+	     end;
+	     if not coalesce(ok,false) then
+	       raise exception 'CHECK % no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: %',c.conname,c.expr;
+	     end if;
+	   end if;
+	 end loop;
+	end $$
+2026-09-22 23:56:16.197 -05 [2764] ERROR:  CHECK chk_metodo_pago no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: (metodo_pago = ANY (ARRAY[('PAYPHONE'::character varying)::text, ('TARJETA'::character varying)::text, ('TRANSFERENCIA'::character varying)::text, ('SIMULADO'::character varying)::text]))
+2026-09-22 23:56:16.197 -05 [2764] CONTEXT:  PL/pgSQL function inline_code_block line 14 at RAISE
+2026-09-22 23:56:16.197 -05 [2764] STATEMENT:  
+	
+	-- Verificar el resto de constraints de proveedor/método sin alterarlos.
+	-- Si un CHECK excluye PAYPAL, aborta con su nombre para que el operador lo amplíe conservando los valores anteriores.
+	do $$
+	declare c record; ok boolean;
+	begin
+	 for c in select conname,pg_get_expr(conbin,conrelid) as expr from pg_constraint
+	   where conrelid='public.pagos'::regclass and contype='c'
+	 loop
+	   if c.expr ~ '(proveedor|metodo_pago)' then
+	     begin
+	       execute 'select (' || c.expr || ') from (select ''PAYPAL''::text as proveedor,''PAYPAL''::text as metodo_pago) x' into ok;
+	     exception when others then
+	       raise exception 'Revisar CHECK %: %; no se modificó automáticamente',c.conname,c.expr;
+	     end;
+	     if not coalesce(ok,false) then
+	       raise exception 'CHECK % no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: %',c.conname,c.expr;
+	     end if;
+	   end if;
+	 end loop;
+	end $$
+2026-09-22 23:56:16.635 -05 [28072] ERROR:  CHECK chk_metodo_pago no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: (metodo_pago = ANY (ARRAY[('PAYPHONE'::character varying)::text, ('TARJETA'::character varying)::text, ('TRANSFERENCIA'::character varying)::text, ('SIMULADO'::character varying)::text]))
+2026-09-22 23:56:16.635 -05 [28072] CONTEXT:  PL/pgSQL function inline_code_block line 14 at RAISE
+2026-09-22 23:56:16.635 -05 [28072] STATEMENT:  
+	
+	-- Verificar el resto de constraints de proveedor/método sin alterarlos.
+	-- Si un CHECK excluye PAYPAL, aborta con su nombre para que el operador lo amplíe conservando los valores anteriores.
+	do $$
+	declare c record; ok boolean;
+	begin
+	 for c in select conname,pg_get_expr(conbin,conrelid) as expr from pg_constraint
+	   where conrelid='public.pagos'::regclass and contype='c'
+	 loop
+	   if c.expr ~ '(proveedor|metodo_pago)' then
+	     begin
+	       execute 'select (' || c.expr || ') from (select ''PAYPAL''::text as proveedor,''PAYPAL''::text as metodo_pago) x' into ok;
+	     exception when others then
+	       raise exception 'Revisar CHECK %: %; no se modificó automáticamente',c.conname,c.expr;
+	     end;
+	     if not coalesce(ok,false) then
+	       raise exception 'CHECK % no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: %',c.conname,c.expr;
+	     end if;
+	   end if;
+	 end loop;
+	end $$
+2026-09-22 23:56:16.995 -05 [24900] ERROR:  CHECK chk_metodo_pago no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: (metodo_pago = ANY (ARRAY[('PAYPHONE'::character varying)::text, ('TARJETA'::character varying)::text, ('TRANSFERENCIA'::character varying)::text, ('SIMULADO'::character varying)::text]))
+2026-09-22 23:56:16.995 -05 [24900] CONTEXT:  PL/pgSQL function inline_code_block line 14 at RAISE
+2026-09-22 23:56:16.995 -05 [24900] STATEMENT:  
+	
+	-- Verificar el resto de constraints de proveedor/método sin alterarlos.
+	-- Si un CHECK excluye PAYPAL, aborta con su nombre para que el operador lo amplíe conservando los valores anteriores.
+	do $$
+	declare c record; ok boolean;
+	begin
+	 for c in select conname,pg_get_expr(conbin,conrelid) as expr from pg_constraint
+	   where conrelid='public.pagos'::regclass and contype='c'
+	 loop
+	   if c.expr ~ '(proveedor|metodo_pago)' then
+	     begin
+	       execute 'select (' || c.expr || ') from (select ''PAYPAL''::text as proveedor,''PAYPAL''::text as metodo_pago) x' into ok;
+	     exception when others then
+	       raise exception 'Revisar CHECK %: %; no se modificó automáticamente',c.conname,c.expr;
+	     end;
+	     if not coalesce(ok,false) then
+	       raise exception 'CHECK % no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: %',c.conname,c.expr;
+	     end if;
+	   end if;
+	 end loop;
+	end $$
+2026-09-22 23:56:17.375 -05 [3060] ERROR:  CHECK chk_metodo_pago no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: (metodo_pago = ANY (ARRAY[('PAYPHONE'::character varying)::text, ('TARJETA'::character varying)::text, ('TRANSFERENCIA'::character varying)::text, ('SIMULADO'::character varying)::text]))
+2026-09-22 23:56:17.375 -05 [3060] CONTEXT:  PL/pgSQL function inline_code_block line 14 at RAISE
+2026-09-22 23:56:17.375 -05 [3060] STATEMENT:  
+	
+	-- Verificar el resto de constraints de proveedor/método sin alterarlos.
+	-- Si un CHECK excluye PAYPAL, aborta con su nombre para que el operador lo amplíe conservando los valores anteriores.
+	do $$
+	declare c record; ok boolean;
+	begin
+	 for c in select conname,pg_get_expr(conbin,conrelid) as expr from pg_constraint
+	   where conrelid='public.pagos'::regclass and contype='c'
+	 loop
+	   if c.expr ~ '(proveedor|metodo_pago)' then
+	     begin
+	       execute 'select (' || c.expr || ') from (select ''PAYPAL''::text as proveedor,''PAYPAL''::text as metodo_pago) x' into ok;
+	     exception when others then
+	       raise exception 'Revisar CHECK %: %; no se modificó automáticamente',c.conname,c.expr;
+	     end;
+	     if not coalesce(ok,false) then
+	       raise exception 'CHECK % no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: %',c.conname,c.expr;
+	     end if;
+	   end if;
+	 end loop;
+	end $$
+2026-09-22 23:56:17.768 -05 [15280] ERROR:  CHECK chk_metodo_pago no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: (metodo_pago = ANY (ARRAY[('PAYPHONE'::character varying)::text, ('TARJETA'::character varying)::text, ('TRANSFERENCIA'::character varying)::text, ('SIMULADO'::character varying)::text]))
+2026-09-22 23:56:17.768 -05 [15280] CONTEXT:  PL/pgSQL function inline_code_block line 14 at RAISE
+2026-09-22 23:56:17.768 -05 [15280] STATEMENT:  
+	
+	-- Verificar el resto de constraints de proveedor/método sin alterarlos.
+	-- Si un CHECK excluye PAYPAL, aborta con su nombre para que el operador lo amplíe conservando los valores anteriores.
+	do $$
+	declare c record; ok boolean;
+	begin
+	 for c in select conname,pg_get_expr(conbin,conrelid) as expr from pg_constraint
+	   where conrelid='public.pagos'::regclass and contype='c'
+	 loop
+	   if c.expr ~ '(proveedor|metodo_pago)' then
+	     begin
+	       execute 'select (' || c.expr || ') from (select ''PAYPAL''::text as proveedor,''PAYPAL''::text as metodo_pago) x' into ok;
+	     exception when others then
+	       raise exception 'Revisar CHECK %: %; no se modificó automáticamente',c.conname,c.expr;
+	     end;
+	     if not coalesce(ok,false) then
+	       raise exception 'CHECK % no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: %',c.conname,c.expr;
+	     end if;
+	   end if;
+	 end loop;
+	end $$
+2026-09-22 23:56:18.261 -05 [28616] ERROR:  CHECK chk_metodo_pago no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: (metodo_pago = ANY (ARRAY[('PAYPHONE'::character varying)::text, ('TARJETA'::character varying)::text, ('TRANSFERENCIA'::character varying)::text, ('SIMULADO'::character varying)::text]))
+2026-09-22 23:56:18.261 -05 [28616] CONTEXT:  PL/pgSQL function inline_code_block line 14 at RAISE
+2026-09-22 23:56:18.261 -05 [28616] STATEMENT:  
+	
+	-- Verificar el resto de constraints de proveedor/método sin alterarlos.
+	-- Si un CHECK excluye PAYPAL, aborta con su nombre para que el operador lo amplíe conservando los valores anteriores.
+	do $$
+	declare c record; ok boolean;
+	begin
+	 for c in select conname,pg_get_expr(conbin,conrelid) as expr from pg_constraint
+	   where conrelid='public.pagos'::regclass and contype='c'
+	 loop
+	   if c.expr ~ '(proveedor|metodo_pago)' then
+	     begin
+	       execute 'select (' || c.expr || ') from (select ''PAYPAL''::text as proveedor,''PAYPAL''::text as metodo_pago) x' into ok;
+	     exception when others then
+	       raise exception 'Revisar CHECK %: %; no se modificó automáticamente',c.conname,c.expr;
+	     end;
+	     if not coalesce(ok,false) then
+	       raise exception 'CHECK % no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: %',c.conname,c.expr;
+	     end if;
+	   end if;
+	 end loop;
+	end $$
+2026-09-22 23:56:18.635 -05 [18396] ERROR:  CHECK chk_metodo_pago no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: (metodo_pago = ANY (ARRAY[('PAYPHONE'::character varying)::text, ('TARJETA'::character varying)::text, ('TRANSFERENCIA'::character varying)::text, ('SIMULADO'::character varying)::text]))
+2026-09-22 23:56:18.635 -05 [18396] CONTEXT:  PL/pgSQL function inline_code_block line 14 at RAISE
+2026-09-22 23:56:18.635 -05 [18396] STATEMENT:  
+	
+	-- Verificar el resto de constraints de proveedor/método sin alterarlos.
+	-- Si un CHECK excluye PAYPAL, aborta con su nombre para que el operador lo amplíe conservando los valores anteriores.
+	do $$
+	declare c record; ok boolean;
+	begin
+	 for c in select conname,pg_get_expr(conbin,conrelid) as expr from pg_constraint
+	   where conrelid='public.pagos'::regclass and contype='c'
+	 loop
+	   if c.expr ~ '(proveedor|metodo_pago)' then
+	     begin
+	       execute 'select (' || c.expr || ') from (select ''PAYPAL''::text as proveedor,''PAYPAL''::text as metodo_pago) x' into ok;
+	     exception when others then
+	       raise exception 'Revisar CHECK %: %; no se modificó automáticamente',c.conname,c.expr;
+	     end;
+	     if not coalesce(ok,false) then
+	       raise exception 'CHECK % no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: %',c.conname,c.expr;
+	     end if;
+	   end if;
+	 end loop;
+	end $$
+2026-09-22 23:56:19.032 -05 [16700] ERROR:  CHECK chk_metodo_pago no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: (metodo_pago = ANY (ARRAY[('PAYPHONE'::character varying)::text, ('TARJETA'::character varying)::text, ('TRANSFERENCIA'::character varying)::text, ('SIMULADO'::character varying)::text]))
+2026-09-22 23:56:19.032 -05 [16700] CONTEXT:  PL/pgSQL function inline_code_block line 14 at RAISE
+2026-09-22 23:56:19.032 -05 [16700] STATEMENT:  
+	
+	-- Verificar el resto de constraints de proveedor/método sin alterarlos.
+	-- Si un CHECK excluye PAYPAL, aborta con su nombre para que el operador lo amplíe conservando los valores anteriores.
+	do $$
+	declare c record; ok boolean;
+	begin
+	 for c in select conname,pg_get_expr(conbin,conrelid) as expr from pg_constraint
+	   where conrelid='public.pagos'::regclass and contype='c'
+	 loop
+	   if c.expr ~ '(proveedor|metodo_pago)' then
+	     begin
+	       execute 'select (' || c.expr || ') from (select ''PAYPAL''::text as proveedor,''PAYPAL''::text as metodo_pago) x' into ok;
+	     exception when others then
+	       raise exception 'Revisar CHECK %: %; no se modificó automáticamente',c.conname,c.expr;
+	     end;
+	     if not coalesce(ok,false) then
+	       raise exception 'CHECK % no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: %',c.conname,c.expr;
+	     end if;
+	   end if;
+	 end loop;
+	end $$
+2026-09-22 23:56:19.396 -05 [24380] ERROR:  CHECK chk_metodo_pago no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: (metodo_pago = ANY (ARRAY[('PAYPHONE'::character varying)::text, ('TARJETA'::character varying)::text, ('TRANSFERENCIA'::character varying)::text, ('SIMULADO'::character varying)::text]))
+2026-09-22 23:56:19.396 -05 [24380] CONTEXT:  PL/pgSQL function inline_code_block line 14 at RAISE
+2026-09-22 23:56:19.396 -05 [24380] STATEMENT:  
+	
+	-- Verificar el resto de constraints de proveedor/método sin alterarlos.
+	-- Si un CHECK excluye PAYPAL, aborta con su nombre para que el operador lo amplíe conservando los valores anteriores.
+	do $$
+	declare c record; ok boolean;
+	begin
+	 for c in select conname,pg_get_expr(conbin,conrelid) as expr from pg_constraint
+	   where conrelid='public.pagos'::regclass and contype='c'
+	 loop
+	   if c.expr ~ '(proveedor|metodo_pago)' then
+	     begin
+	       execute 'select (' || c.expr || ') from (select ''PAYPAL''::text as proveedor,''PAYPAL''::text as metodo_pago) x' into ok;
+	     exception when others then
+	       raise exception 'Revisar CHECK %: %; no se modificó automáticamente',c.conname,c.expr;
+	     end;
+	     if not coalesce(ok,false) then
+	       raise exception 'CHECK % no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: %',c.conname,c.expr;
+	     end if;
+	   end if;
+	 end loop;
+	end $$
+2026-09-22 23:56:19.732 -05 [23644] ERROR:  CHECK chk_metodo_pago no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: (metodo_pago = ANY (ARRAY[('PAYPHONE'::character varying)::text, ('TARJETA'::character varying)::text, ('TRANSFERENCIA'::character varying)::text, ('SIMULADO'::character varying)::text]))
+2026-09-22 23:56:19.732 -05 [23644] CONTEXT:  PL/pgSQL function inline_code_block line 14 at RAISE
+2026-09-22 23:56:19.732 -05 [23644] STATEMENT:  
+	
+	-- Verificar el resto de constraints de proveedor/método sin alterarlos.
+	-- Si un CHECK excluye PAYPAL, aborta con su nombre para que el operador lo amplíe conservando los valores anteriores.
+	do $$
+	declare c record; ok boolean;
+	begin
+	 for c in select conname,pg_get_expr(conbin,conrelid) as expr from pg_constraint
+	   where conrelid='public.pagos'::regclass and contype='c'
+	 loop
+	   if c.expr ~ '(proveedor|metodo_pago)' then
+	     begin
+	       execute 'select (' || c.expr || ') from (select ''PAYPAL''::text as proveedor,''PAYPAL''::text as metodo_pago) x' into ok;
+	     exception when others then
+	       raise exception 'Revisar CHECK %: %; no se modificó automáticamente',c.conname,c.expr;
+	     end;
+	     if not coalesce(ok,false) then
+	       raise exception 'CHECK % no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: %',c.conname,c.expr;
+	     end if;
+	   end if;
+	 end loop;
+	end $$
+2026-09-22 23:56:20.134 -05 [7924] ERROR:  CHECK chk_metodo_pago no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: (metodo_pago = ANY (ARRAY[('PAYPHONE'::character varying)::text, ('TARJETA'::character varying)::text, ('TRANSFERENCIA'::character varying)::text, ('SIMULADO'::character varying)::text]))
+2026-09-22 23:56:20.134 -05 [7924] CONTEXT:  PL/pgSQL function inline_code_block line 14 at RAISE
+2026-09-22 23:56:20.134 -05 [7924] STATEMENT:  
+	
+	-- Verificar el resto de constraints de proveedor/método sin alterarlos.
+	-- Si un CHECK excluye PAYPAL, aborta con su nombre para que el operador lo amplíe conservando los valores anteriores.
+	do $$
+	declare c record; ok boolean;
+	begin
+	 for c in select conname,pg_get_expr(conbin,conrelid) as expr from pg_constraint
+	   where conrelid='public.pagos'::regclass and contype='c'
+	 loop
+	   if c.expr ~ '(proveedor|metodo_pago)' then
+	     begin
+	       execute 'select (' || c.expr || ') from (select ''PAYPAL''::text as proveedor,''PAYPAL''::text as metodo_pago) x' into ok;
+	     exception when others then
+	       raise exception 'Revisar CHECK %: %; no se modificó automáticamente',c.conname,c.expr;
+	     end;
+	     if not coalesce(ok,false) then
+	       raise exception 'CHECK % no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: %',c.conname,c.expr;
+	     end if;
+	   end if;
+	 end loop;
+	end $$
+2026-09-22 23:56:20.584 -05 [29556] ERROR:  CHECK chk_metodo_pago no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: (metodo_pago = ANY (ARRAY[('PAYPHONE'::character varying)::text, ('TARJETA'::character varying)::text, ('TRANSFERENCIA'::character varying)::text, ('SIMULADO'::character varying)::text]))
+2026-09-22 23:56:20.584 -05 [29556] CONTEXT:  PL/pgSQL function inline_code_block line 14 at RAISE
+2026-09-22 23:56:20.584 -05 [29556] STATEMENT:  
+	
+	-- Verificar el resto de constraints de proveedor/método sin alterarlos.
+	-- Si un CHECK excluye PAYPAL, aborta con su nombre para que el operador lo amplíe conservando los valores anteriores.
+	do $$
+	declare c record; ok boolean;
+	begin
+	 for c in select conname,pg_get_expr(conbin,conrelid) as expr from pg_constraint
+	   where conrelid='public.pagos'::regclass and contype='c'
+	 loop
+	   if c.expr ~ '(proveedor|metodo_pago)' then
+	     begin
+	       execute 'select (' || c.expr || ') from (select ''PAYPAL''::text as proveedor,''PAYPAL''::text as metodo_pago) x' into ok;
+	     exception when others then
+	       raise exception 'Revisar CHECK %: %; no se modificó automáticamente',c.conname,c.expr;
+	     end;
+	     if not coalesce(ok,false) then
+	       raise exception 'CHECK % no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: %',c.conname,c.expr;
+	     end if;
+	   end if;
+	 end loop;
+	end $$
+2026-09-22 23:56:21.016 -05 [15944] ERROR:  CHECK chk_metodo_pago no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: (metodo_pago = ANY (ARRAY[('PAYPHONE'::character varying)::text, ('TARJETA'::character varying)::text, ('TRANSFERENCIA'::character varying)::text, ('SIMULADO'::character varying)::text]))
+2026-09-22 23:56:21.016 -05 [15944] CONTEXT:  PL/pgSQL function inline_code_block line 14 at RAISE
+2026-09-22 23:56:21.016 -05 [15944] STATEMENT:  
+	
+	-- Verificar el resto de constraints de proveedor/método sin alterarlos.
+	-- Si un CHECK excluye PAYPAL, aborta con su nombre para que el operador lo amplíe conservando los valores anteriores.
+	do $$
+	declare c record; ok boolean;
+	begin
+	 for c in select conname,pg_get_expr(conbin,conrelid) as expr from pg_constraint
+	   where conrelid='public.pagos'::regclass and contype='c'
+	 loop
+	   if c.expr ~ '(proveedor|metodo_pago)' then
+	     begin
+	       execute 'select (' || c.expr || ') from (select ''PAYPAL''::text as proveedor,''PAYPAL''::text as metodo_pago) x' into ok;
+	     exception when others then
+	       raise exception 'Revisar CHECK %: %; no se modificó automáticamente',c.conname,c.expr;
+	     end;
+	     if not coalesce(ok,false) then
+	       raise exception 'CHECK % no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: %',c.conname,c.expr;
+	     end if;
+	   end if;
+	 end loop;
+	end $$
+2026-09-22 23:56:21.484 -05 [27512] ERROR:  CHECK chk_metodo_pago no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: (metodo_pago = ANY (ARRAY[('PAYPHONE'::character varying)::text, ('TARJETA'::character varying)::text, ('TRANSFERENCIA'::character varying)::text, ('SIMULADO'::character varying)::text]))
+2026-09-22 23:56:21.484 -05 [27512] CONTEXT:  PL/pgSQL function inline_code_block line 14 at RAISE
+2026-09-22 23:56:21.484 -05 [27512] STATEMENT:  
+	
+	-- Verificar el resto de constraints de proveedor/método sin alterarlos.
+	-- Si un CHECK excluye PAYPAL, aborta con su nombre para que el operador lo amplíe conservando los valores anteriores.
+	do $$
+	declare c record; ok boolean;
+	begin
+	 for c in select conname,pg_get_expr(conbin,conrelid) as expr from pg_constraint
+	   where conrelid='public.pagos'::regclass and contype='c'
+	 loop
+	   if c.expr ~ '(proveedor|metodo_pago)' then
+	     begin
+	       execute 'select (' || c.expr || ') from (select ''PAYPAL''::text as proveedor,''PAYPAL''::text as metodo_pago) x' into ok;
+	     exception when others then
+	       raise exception 'Revisar CHECK %: %; no se modificó automáticamente',c.conname,c.expr;
+	     end;
+	     if not coalesce(ok,false) then
+	       raise exception 'CHECK % no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: %',c.conname,c.expr;
+	     end if;
+	   end if;
+	 end loop;
+	end $$
+2026-09-22 23:57:22.958 -05 [14640] ERROR:  CHECK chk_metodo_pago no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: ((metodo_pago)::text = ANY (ARRAY[('PAYPHONE'::character varying)::text, ('TARJETA'::character varying)::text, ('TRANSFERENCIA'::character varying)::text, ('SIMULADO'::character varying)::text]))
+2026-09-22 23:57:22.958 -05 [14640] CONTEXT:  PL/pgSQL function inline_code_block line 14 at RAISE
+2026-09-22 23:57:22.958 -05 [14640] STATEMENT:  
+	
+	-- Verificar el resto de constraints de proveedor/método sin alterarlos.
+	-- Si un CHECK excluye PAYPAL, aborta con su nombre para que el operador lo amplíe conservando los valores anteriores.
+	do $$
+	declare c record; ok boolean;
+	begin
+	 for c in select conname,pg_get_expr(conbin,conrelid) as expr from pg_constraint
+	   where conrelid='public.pagos'::regclass and contype='c'
+	 loop
+	   if c.expr ~ '(proveedor|metodo_pago)' then
+	     begin
+	       execute 'select (' || c.expr || ') from (select ''PAYPAL''::text as proveedor,''PAYPAL''::text as metodo_pago) x' into ok;
+	     exception when others then
+	       raise exception 'Revisar CHECK %: %; no se modificó automáticamente',c.conname,c.expr;
+	     end;
+	     if not coalesce(ok,false) then
+	       raise exception 'CHECK % no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: %',c.conname,c.expr;
+	     end if;
+	   end if;
+	 end loop;
+	end $$
+2026-09-22 23:57:32.935 -05 [2860] ERROR:  CHECK chk_metodo_pago no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: ((metodo_pago)::text = ANY (ARRAY[('PAYPHONE'::character varying)::text, ('TARJETA'::character varying)::text, ('TRANSFERENCIA'::character varying)::text, ('SIMULADO'::character varying)::text]))
+2026-09-22 23:57:32.935 -05 [2860] CONTEXT:  PL/pgSQL function inline_code_block line 14 at RAISE
+2026-09-22 23:57:32.935 -05 [2860] STATEMENT:  
+	
+	-- Verificar el resto de constraints de proveedor/método sin alterarlos.
+	-- Si un CHECK excluye PAYPAL, aborta con su nombre para que el operador lo amplíe conservando los valores anteriores.
+	do $$
+	declare c record; ok boolean;
+	begin
+	 for c in select conname,pg_get_expr(conbin,conrelid) as expr from pg_constraint
+	   where conrelid='public.pagos'::regclass and contype='c'
+	 loop
+	   if c.expr ~ '(proveedor|metodo_pago)' then
+	     begin
+	       execute 'select (' || c.expr || ') from (select ''PAYPAL''::text as proveedor,''PAYPAL''::text as metodo_pago) x' into ok;
+	     exception when others then
+	       raise exception 'Revisar CHECK %: %; no se modificó automáticamente',c.conname,c.expr;
+	     end;
+	     if not coalesce(ok,false) then
+	       raise exception 'CHECK % no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: %',c.conname,c.expr;
+	     end if;
+	   end if;
+	 end loop;
+	end $$
+2026-09-22 23:57:33.366 -05 [21780] ERROR:  CHECK chk_metodo_pago no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: ((metodo_pago)::text = ANY (ARRAY[('PAYPHONE'::character varying)::text, ('TARJETA'::character varying)::text, ('TRANSFERENCIA'::character varying)::text, ('SIMULADO'::character varying)::text]))
+2026-09-22 23:57:33.366 -05 [21780] CONTEXT:  PL/pgSQL function inline_code_block line 14 at RAISE
+2026-09-22 23:57:33.366 -05 [21780] STATEMENT:  
+	
+	-- Verificar el resto de constraints de proveedor/método sin alterarlos.
+	-- Si un CHECK excluye PAYPAL, aborta con su nombre para que el operador lo amplíe conservando los valores anteriores.
+	do $$
+	declare c record; ok boolean;
+	begin
+	 for c in select conname,pg_get_expr(conbin,conrelid) as expr from pg_constraint
+	   where conrelid='public.pagos'::regclass and contype='c'
+	 loop
+	   if c.expr ~ '(proveedor|metodo_pago)' then
+	     begin
+	       execute 'select (' || c.expr || ') from (select ''PAYPAL''::text as proveedor,''PAYPAL''::text as metodo_pago) x' into ok;
+	     exception when others then
+	       raise exception 'Revisar CHECK %: %; no se modificó automáticamente',c.conname,c.expr;
+	     end;
+	     if not coalesce(ok,false) then
+	       raise exception 'CHECK % no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: %',c.conname,c.expr;
+	     end if;
+	   end if;
+	 end loop;
+	end $$
+2026-09-22 23:57:33.743 -05 [28452] ERROR:  CHECK chk_metodo_pago no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: ((metodo_pago)::text = ANY (ARRAY[('PAYPHONE'::character varying)::text, ('TARJETA'::character varying)::text, ('TRANSFERENCIA'::character varying)::text, ('SIMULADO'::character varying)::text]))
+2026-09-22 23:57:33.743 -05 [28452] CONTEXT:  PL/pgSQL function inline_code_block line 14 at RAISE
+2026-09-22 23:57:33.743 -05 [28452] STATEMENT:  
+	
+	-- Verificar el resto de constraints de proveedor/método sin alterarlos.
+	-- Si un CHECK excluye PAYPAL, aborta con su nombre para que el operador lo amplíe conservando los valores anteriores.
+	do $$
+	declare c record; ok boolean;
+	begin
+	 for c in select conname,pg_get_expr(conbin,conrelid) as expr from pg_constraint
+	   where conrelid='public.pagos'::regclass and contype='c'
+	 loop
+	   if c.expr ~ '(proveedor|metodo_pago)' then
+	     begin
+	       execute 'select (' || c.expr || ') from (select ''PAYPAL''::text as proveedor,''PAYPAL''::text as metodo_pago) x' into ok;
+	     exception when others then
+	       raise exception 'Revisar CHECK %: %; no se modificó automáticamente',c.conname,c.expr;
+	     end;
+	     if not coalesce(ok,false) then
+	       raise exception 'CHECK % no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: %',c.conname,c.expr;
+	     end if;
+	   end if;
+	 end loop;
+	end $$
+2026-09-22 23:57:34.149 -05 [10232] ERROR:  CHECK chk_metodo_pago no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: ((metodo_pago)::text = ANY (ARRAY[('PAYPHONE'::character varying)::text, ('TARJETA'::character varying)::text, ('TRANSFERENCIA'::character varying)::text, ('SIMULADO'::character varying)::text]))
+2026-09-22 23:57:34.149 -05 [10232] CONTEXT:  PL/pgSQL function inline_code_block line 14 at RAISE
+2026-09-22 23:57:34.149 -05 [10232] STATEMENT:  
+	
+	-- Verificar el resto de constraints de proveedor/método sin alterarlos.
+	-- Si un CHECK excluye PAYPAL, aborta con su nombre para que el operador lo amplíe conservando los valores anteriores.
+	do $$
+	declare c record; ok boolean;
+	begin
+	 for c in select conname,pg_get_expr(conbin,conrelid) as expr from pg_constraint
+	   where conrelid='public.pagos'::regclass and contype='c'
+	 loop
+	   if c.expr ~ '(proveedor|metodo_pago)' then
+	     begin
+	       execute 'select (' || c.expr || ') from (select ''PAYPAL''::text as proveedor,''PAYPAL''::text as metodo_pago) x' into ok;
+	     exception when others then
+	       raise exception 'Revisar CHECK %: %; no se modificó automáticamente',c.conname,c.expr;
+	     end;
+	     if not coalesce(ok,false) then
+	       raise exception 'CHECK % no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: %',c.conname,c.expr;
+	     end if;
+	   end if;
+	 end loop;
+	end $$
+2026-09-22 23:57:34.532 -05 [17232] ERROR:  CHECK chk_metodo_pago no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: ((metodo_pago)::text = ANY (ARRAY[('PAYPHONE'::character varying)::text, ('TARJETA'::character varying)::text, ('TRANSFERENCIA'::character varying)::text, ('SIMULADO'::character varying)::text]))
+2026-09-22 23:57:34.532 -05 [17232] CONTEXT:  PL/pgSQL function inline_code_block line 14 at RAISE
+2026-09-22 23:57:34.532 -05 [17232] STATEMENT:  
+	
+	-- Verificar el resto de constraints de proveedor/método sin alterarlos.
+	-- Si un CHECK excluye PAYPAL, aborta con su nombre para que el operador lo amplíe conservando los valores anteriores.
+	do $$
+	declare c record; ok boolean;
+	begin
+	 for c in select conname,pg_get_expr(conbin,conrelid) as expr from pg_constraint
+	   where conrelid='public.pagos'::regclass and contype='c'
+	 loop
+	   if c.expr ~ '(proveedor|metodo_pago)' then
+	     begin
+	       execute 'select (' || c.expr || ') from (select ''PAYPAL''::text as proveedor,''PAYPAL''::text as metodo_pago) x' into ok;
+	     exception when others then
+	       raise exception 'Revisar CHECK %: %; no se modificó automáticamente',c.conname,c.expr;
+	     end;
+	     if not coalesce(ok,false) then
+	       raise exception 'CHECK % no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: %',c.conname,c.expr;
+	     end if;
+	   end if;
+	 end loop;
+	end $$
+2026-09-22 23:57:34.933 -05 [17764] ERROR:  CHECK chk_metodo_pago no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: ((metodo_pago)::text = ANY (ARRAY[('PAYPHONE'::character varying)::text, ('TARJETA'::character varying)::text, ('TRANSFERENCIA'::character varying)::text, ('SIMULADO'::character varying)::text]))
+2026-09-22 23:57:34.933 -05 [17764] CONTEXT:  PL/pgSQL function inline_code_block line 14 at RAISE
+2026-09-22 23:57:34.933 -05 [17764] STATEMENT:  
+	
+	-- Verificar el resto de constraints de proveedor/método sin alterarlos.
+	-- Si un CHECK excluye PAYPAL, aborta con su nombre para que el operador lo amplíe conservando los valores anteriores.
+	do $$
+	declare c record; ok boolean;
+	begin
+	 for c in select conname,pg_get_expr(conbin,conrelid) as expr from pg_constraint
+	   where conrelid='public.pagos'::regclass and contype='c'
+	 loop
+	   if c.expr ~ '(proveedor|metodo_pago)' then
+	     begin
+	       execute 'select (' || c.expr || ') from (select ''PAYPAL''::text as proveedor,''PAYPAL''::text as metodo_pago) x' into ok;
+	     exception when others then
+	       raise exception 'Revisar CHECK %: %; no se modificó automáticamente',c.conname,c.expr;
+	     end;
+	     if not coalesce(ok,false) then
+	       raise exception 'CHECK % no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: %',c.conname,c.expr;
+	     end if;
+	   end if;
+	 end loop;
+	end $$
+2026-09-22 23:57:35.367 -05 [27656] ERROR:  CHECK chk_metodo_pago no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: ((metodo_pago)::text = ANY (ARRAY[('PAYPHONE'::character varying)::text, ('TARJETA'::character varying)::text, ('TRANSFERENCIA'::character varying)::text, ('SIMULADO'::character varying)::text]))
+2026-09-22 23:57:35.367 -05 [27656] CONTEXT:  PL/pgSQL function inline_code_block line 14 at RAISE
+2026-09-22 23:57:35.367 -05 [27656] STATEMENT:  
+	
+	-- Verificar el resto de constraints de proveedor/método sin alterarlos.
+	-- Si un CHECK excluye PAYPAL, aborta con su nombre para que el operador lo amplíe conservando los valores anteriores.
+	do $$
+	declare c record; ok boolean;
+	begin
+	 for c in select conname,pg_get_expr(conbin,conrelid) as expr from pg_constraint
+	   where conrelid='public.pagos'::regclass and contype='c'
+	 loop
+	   if c.expr ~ '(proveedor|metodo_pago)' then
+	     begin
+	       execute 'select (' || c.expr || ') from (select ''PAYPAL''::text as proveedor,''PAYPAL''::text as metodo_pago) x' into ok;
+	     exception when others then
+	       raise exception 'Revisar CHECK %: %; no se modificó automáticamente',c.conname,c.expr;
+	     end;
+	     if not coalesce(ok,false) then
+	       raise exception 'CHECK % no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: %',c.conname,c.expr;
+	     end if;
+	   end if;
+	 end loop;
+	end $$
+2026-09-22 23:57:35.782 -05 [7760] ERROR:  CHECK chk_metodo_pago no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: ((metodo_pago)::text = ANY (ARRAY[('PAYPHONE'::character varying)::text, ('TARJETA'::character varying)::text, ('TRANSFERENCIA'::character varying)::text, ('SIMULADO'::character varying)::text]))
+2026-09-22 23:57:35.782 -05 [7760] CONTEXT:  PL/pgSQL function inline_code_block line 14 at RAISE
+2026-09-22 23:57:35.782 -05 [7760] STATEMENT:  
+	
+	-- Verificar el resto de constraints de proveedor/método sin alterarlos.
+	-- Si un CHECK excluye PAYPAL, aborta con su nombre para que el operador lo amplíe conservando los valores anteriores.
+	do $$
+	declare c record; ok boolean;
+	begin
+	 for c in select conname,pg_get_expr(conbin,conrelid) as expr from pg_constraint
+	   where conrelid='public.pagos'::regclass and contype='c'
+	 loop
+	   if c.expr ~ '(proveedor|metodo_pago)' then
+	     begin
+	       execute 'select (' || c.expr || ') from (select ''PAYPAL''::text as proveedor,''PAYPAL''::text as metodo_pago) x' into ok;
+	     exception when others then
+	       raise exception 'Revisar CHECK %: %; no se modificó automáticamente',c.conname,c.expr;
+	     end;
+	     if not coalesce(ok,false) then
+	       raise exception 'CHECK % no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: %',c.conname,c.expr;
+	     end if;
+	   end if;
+	 end loop;
+	end $$
+2026-09-22 23:57:36.189 -05 [28032] ERROR:  CHECK chk_metodo_pago no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: ((metodo_pago)::text = ANY (ARRAY[('PAYPHONE'::character varying)::text, ('TARJETA'::character varying)::text, ('TRANSFERENCIA'::character varying)::text, ('SIMULADO'::character varying)::text]))
+2026-09-22 23:57:36.189 -05 [28032] CONTEXT:  PL/pgSQL function inline_code_block line 14 at RAISE
+2026-09-22 23:57:36.189 -05 [28032] STATEMENT:  
+	
+	-- Verificar el resto de constraints de proveedor/método sin alterarlos.
+	-- Si un CHECK excluye PAYPAL, aborta con su nombre para que el operador lo amplíe conservando los valores anteriores.
+	do $$
+	declare c record; ok boolean;
+	begin
+	 for c in select conname,pg_get_expr(conbin,conrelid) as expr from pg_constraint
+	   where conrelid='public.pagos'::regclass and contype='c'
+	 loop
+	   if c.expr ~ '(proveedor|metodo_pago)' then
+	     begin
+	       execute 'select (' || c.expr || ') from (select ''PAYPAL''::text as proveedor,''PAYPAL''::text as metodo_pago) x' into ok;
+	     exception when others then
+	       raise exception 'Revisar CHECK %: %; no se modificó automáticamente',c.conname,c.expr;
+	     end;
+	     if not coalesce(ok,false) then
+	       raise exception 'CHECK % no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: %',c.conname,c.expr;
+	     end if;
+	   end if;
+	 end loop;
+	end $$
+2026-09-22 23:57:36.604 -05 [21600] ERROR:  CHECK chk_metodo_pago no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: ((metodo_pago)::text = ANY (ARRAY[('PAYPHONE'::character varying)::text, ('TARJETA'::character varying)::text, ('TRANSFERENCIA'::character varying)::text, ('SIMULADO'::character varying)::text]))
+2026-09-22 23:57:36.604 -05 [21600] CONTEXT:  PL/pgSQL function inline_code_block line 14 at RAISE
+2026-09-22 23:57:36.604 -05 [21600] STATEMENT:  
+	
+	-- Verificar el resto de constraints de proveedor/método sin alterarlos.
+	-- Si un CHECK excluye PAYPAL, aborta con su nombre para que el operador lo amplíe conservando los valores anteriores.
+	do $$
+	declare c record; ok boolean;
+	begin
+	 for c in select conname,pg_get_expr(conbin,conrelid) as expr from pg_constraint
+	   where conrelid='public.pagos'::regclass and contype='c'
+	 loop
+	   if c.expr ~ '(proveedor|metodo_pago)' then
+	     begin
+	       execute 'select (' || c.expr || ') from (select ''PAYPAL''::text as proveedor,''PAYPAL''::text as metodo_pago) x' into ok;
+	     exception when others then
+	       raise exception 'Revisar CHECK %: %; no se modificó automáticamente',c.conname,c.expr;
+	     end;
+	     if not coalesce(ok,false) then
+	       raise exception 'CHECK % no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: %',c.conname,c.expr;
+	     end if;
+	   end if;
+	 end loop;
+	end $$
+2026-09-22 23:57:36.970 -05 [20588] ERROR:  CHECK chk_metodo_pago no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: ((metodo_pago)::text = ANY (ARRAY[('PAYPHONE'::character varying)::text, ('TARJETA'::character varying)::text, ('TRANSFERENCIA'::character varying)::text, ('SIMULADO'::character varying)::text]))
+2026-09-22 23:57:36.970 -05 [20588] CONTEXT:  PL/pgSQL function inline_code_block line 14 at RAISE
+2026-09-22 23:57:36.970 -05 [20588] STATEMENT:  
+	
+	-- Verificar el resto de constraints de proveedor/método sin alterarlos.
+	-- Si un CHECK excluye PAYPAL, aborta con su nombre para que el operador lo amplíe conservando los valores anteriores.
+	do $$
+	declare c record; ok boolean;
+	begin
+	 for c in select conname,pg_get_expr(conbin,conrelid) as expr from pg_constraint
+	   where conrelid='public.pagos'::regclass and contype='c'
+	 loop
+	   if c.expr ~ '(proveedor|metodo_pago)' then
+	     begin
+	       execute 'select (' || c.expr || ') from (select ''PAYPAL''::text as proveedor,''PAYPAL''::text as metodo_pago) x' into ok;
+	     exception when others then
+	       raise exception 'Revisar CHECK %: %; no se modificó automáticamente',c.conname,c.expr;
+	     end;
+	     if not coalesce(ok,false) then
+	       raise exception 'CHECK % no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: %',c.conname,c.expr;
+	     end if;
+	   end if;
+	 end loop;
+	end $$
+2026-09-22 23:57:37.356 -05 [27840] ERROR:  CHECK chk_metodo_pago no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: ((metodo_pago)::text = ANY (ARRAY[('PAYPHONE'::character varying)::text, ('TARJETA'::character varying)::text, ('TRANSFERENCIA'::character varying)::text, ('SIMULADO'::character varying)::text]))
+2026-09-22 23:57:37.356 -05 [27840] CONTEXT:  PL/pgSQL function inline_code_block line 14 at RAISE
+2026-09-22 23:57:37.356 -05 [27840] STATEMENT:  
+	
+	-- Verificar el resto de constraints de proveedor/método sin alterarlos.
+	-- Si un CHECK excluye PAYPAL, aborta con su nombre para que el operador lo amplíe conservando los valores anteriores.
+	do $$
+	declare c record; ok boolean;
+	begin
+	 for c in select conname,pg_get_expr(conbin,conrelid) as expr from pg_constraint
+	   where conrelid='public.pagos'::regclass and contype='c'
+	 loop
+	   if c.expr ~ '(proveedor|metodo_pago)' then
+	     begin
+	       execute 'select (' || c.expr || ') from (select ''PAYPAL''::text as proveedor,''PAYPAL''::text as metodo_pago) x' into ok;
+	     exception when others then
+	       raise exception 'Revisar CHECK %: %; no se modificó automáticamente',c.conname,c.expr;
+	     end;
+	     if not coalesce(ok,false) then
+	       raise exception 'CHECK % no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: %',c.conname,c.expr;
+	     end if;
+	   end if;
+	 end loop;
+	end $$
+2026-09-22 23:57:37.806 -05 [10432] ERROR:  CHECK chk_metodo_pago no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: ((metodo_pago)::text = ANY (ARRAY[('PAYPHONE'::character varying)::text, ('TARJETA'::character varying)::text, ('TRANSFERENCIA'::character varying)::text, ('SIMULADO'::character varying)::text]))
+2026-09-22 23:57:37.806 -05 [10432] CONTEXT:  PL/pgSQL function inline_code_block line 14 at RAISE
+2026-09-22 23:57:37.806 -05 [10432] STATEMENT:  
+	
+	-- Verificar el resto de constraints de proveedor/método sin alterarlos.
+	-- Si un CHECK excluye PAYPAL, aborta con su nombre para que el operador lo amplíe conservando los valores anteriores.
+	do $$
+	declare c record; ok boolean;
+	begin
+	 for c in select conname,pg_get_expr(conbin,conrelid) as expr from pg_constraint
+	   where conrelid='public.pagos'::regclass and contype='c'
+	 loop
+	   if c.expr ~ '(proveedor|metodo_pago)' then
+	     begin
+	       execute 'select (' || c.expr || ') from (select ''PAYPAL''::text as proveedor,''PAYPAL''::text as metodo_pago) x' into ok;
+	     exception when others then
+	       raise exception 'Revisar CHECK %: %; no se modificó automáticamente',c.conname,c.expr;
+	     end;
+	     if not coalesce(ok,false) then
+	       raise exception 'CHECK % no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: %',c.conname,c.expr;
+	     end if;
+	   end if;
+	 end loop;
+	end $$
+2026-09-22 23:57:38.217 -05 [4772] ERROR:  CHECK chk_metodo_pago no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: ((metodo_pago)::text = ANY (ARRAY[('PAYPHONE'::character varying)::text, ('TARJETA'::character varying)::text, ('TRANSFERENCIA'::character varying)::text, ('SIMULADO'::character varying)::text]))
+2026-09-22 23:57:38.217 -05 [4772] CONTEXT:  PL/pgSQL function inline_code_block line 14 at RAISE
+2026-09-22 23:57:38.217 -05 [4772] STATEMENT:  
+	
+	-- Verificar el resto de constraints de proveedor/método sin alterarlos.
+	-- Si un CHECK excluye PAYPAL, aborta con su nombre para que el operador lo amplíe conservando los valores anteriores.
+	do $$
+	declare c record; ok boolean;
+	begin
+	 for c in select conname,pg_get_expr(conbin,conrelid) as expr from pg_constraint
+	   where conrelid='public.pagos'::regclass and contype='c'
+	 loop
+	   if c.expr ~ '(proveedor|metodo_pago)' then
+	     begin
+	       execute 'select (' || c.expr || ') from (select ''PAYPAL''::text as proveedor,''PAYPAL''::text as metodo_pago) x' into ok;
+	     exception when others then
+	       raise exception 'Revisar CHECK %: %; no se modificó automáticamente',c.conname,c.expr;
+	     end;
+	     if not coalesce(ok,false) then
+	       raise exception 'CHECK % no admite PAYPAL. Ampliarlo conservando todos sus valores históricos: %',c.conname,c.expr;
+	     end if;
+	   end if;
+	 end loop;
+	end $$
+2026-09-22 23:59:05.841 -05 [12552] LOG:  could not reserve shared memory region (addr=0000020E6EB20000) for child 0000000000001424: error code 487
+2026-09-22 23:59:15.252 -05 [4956] ERROR:  Trigger no revisado: unexpected en ordenes, función unexpected. Revisar con docs/paypal-inspection.sql antes de adaptar esta migración.
+2026-09-22 23:59:15.252 -05 [4956] CONTEXT:  PL/pgSQL function inline_code_block line 29 at RAISE
+2026-09-22 23:59:15.252 -05 [4956] STATEMENT:  
+	
+	-- Una única fuente de fulfillment: PaymentService transaccional.
+	-- Conservar función y trigger anteriores para proveedores históricos, excluyendo SOLO PAYPAL.
+	-- Cualquier otro trigger de negocio requiere inspección, no se ignora ni se deshabilita.
+	do $$
+	declare t record; ddl text;
+	begin
+	 for t in select tr.*,p.proname,p.prosrc,md5(replace(pg_get_functiondef(p.oid),chr(13),'')) as body_hash,pg_get_triggerdef(tr.oid) as definition
+	   from pg_trigger tr join pg_proc p on p.oid=tr.tgfoid
+	   where not tr.tgisinternal and tr.tgrelid in
+	    ('public.pagos'::regclass,'public.ordenes'::regclass,'public.orden_detalle'::regclass,
+	     'public.videojuegos'::regclass,'public.biblioteca'::regclass,'public.carrito_detalle'::regclass)
+	 loop
+	   if t.proname in ('jjc_backend_only','jjc_paypal_audit') then continue; end if;
+	   -- Generadores leídos en la BD real: respetan las referencias explícitas y no hacen fulfillment.
+	   if (t.proname='generar_numero_orden' and t.tgrelid='public.ordenes'::regclass and t.body_hash='4b62307cd92fe12a48216eec84d84123')
+	     or (t.proname='generar_referencia_pago' and t.tgrelid='public.pagos'::regclass and t.body_hash='ee28ac1fa53824b4fd68b2aaaf30e469') then continue; end if;
+	   -- La auditoría histórica también excluye PAYPAL: jjc_paypal_audit registra una sola transición.
+	   if (t.proname='procesar_pago_aprobado' or
+	       (t.proname='registrar_cambio_estado_pago' and t.body_hash='824d80977f14abab7b55c0396a4331f2'))
+	     and t.tgrelid='public.pagos'::regclass and (t.tgtype & 1)=1 then
+	     if t.definition like '%IS DISTINCT FROM ''PAYPAL''%' then continue; end if;
+	     if t.definition like '% WHEN (%' then
+	       ddl := regexp_replace(t.definition,' WHEN \((.*)\) EXECUTE FUNCTION ',
+	         ' WHEN ((\1) AND (NEW.proveedor IS DISTINCT FROM ''PAYPAL'')) EXECUTE FUNCTION ');
+	     else
+	       ddl := replace(t.definition,' EXECUTE FUNCTION ', ' WHEN (NEW.proveedor IS DISTINCT FROM ''PAYPAL'') EXECUTE FUNCTION ');
+	     end if;
+	     if ddl=t.definition then raise exception 'No se pudo adaptar el trigger %',t.tgname; end if;
+	     execute format('drop trigger %I on public.pagos',t.tgname);
+	     execute ddl;
+	   else
+	     raise exception 'Trigger no revisado: % en %, función %. Revisar con docs/paypal-inspection.sql antes de adaptar esta migración.',
+	       t.tgname,t.tgrelid::regclass,t.proname;
+	   end if;
+	 end loop;
+	end $$
+2026-09-22 23:59:23.353 -05 [16520] ERROR:  Operación reservada al backend de pagos
+2026-09-22 23:59:23.353 -05 [16520] CONTEXT:  PL/pgSQL function jjc_backend_only() line 4 at RAISE
+	SQL function "forge" statement 1
+2026-09-22 23:59:23.353 -05 [16520] STATEMENT:  select public.forge()
+2026-09-22 23:59:25.352 -05 [24776] ERROR:  new row for relation "biblioteca" violates check constraint "reject_fixture"
+2026-09-22 23:59:25.352 -05 [24776] DETAIL:  Failing row contains (1, 1, 1, 1, 2026-09-22 23:59:25.332799-05).
+2026-09-22 23:59:25.352 -05 [24776] STATEMENT:  insert into public.biblioteca(id_usuario,id_videojuego,id_orden)
+	select $1,$2,$3 where not exists(select 1 from public.biblioteca where id_usuario=$4 and id_videojuego=$5)
+	
+2026-09-22 23:59:45.618 -05 [12552] LOG:  received fast shutdown request
+2026-09-22 23:59:45.672 -05 [12552] LOG:  aborting any active transactions
+2026-09-22 23:59:45.689 -05 [12552] LOG:  background worker "logical replication launcher" (PID 17416) exited with exit code 1
+2026-09-22 23:59:45.691 -05 [19072] LOG:  shutting down
+2026-09-22 23:59:45.693 -05 [19072] LOG:  checkpoint starting: shutdown immediate
+2026-09-22 23:59:49.174 -05 [19072] LOG:  checkpoint complete: wrote 633 buffers (3.9%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.056 s, sync=2.062 s, total=3.483 s; sync files=2541, longest=0.012 s, average=0.001 s; distance=19003 kB, estimate=19003 kB; lsn=0/45FDDD8, redo lsn=0/45FDDD8
+2026-09-22 23:59:49.220 -05 [12552] LOG:  database system is shut down
+2026-09-23 00:19:34.851 -05 [28156] LOG:  starting PostgreSQL 17.10 on x86_64-windows, compiled by msvc-19.44.35227, 64-bit
+2026-09-23 00:19:34.852 -05 [28156] LOG:  listening on IPv4 address "127.0.0.1", port 55432
+2026-09-23 00:19:34.893 -05 [9008] LOG:  database system was shut down at 2026-09-22 23:59:47 -05
+2026-09-23 00:19:34.916 -05 [28156] LOG:  database system is ready to accept connections
+2026-09-23 00:20:38.062 -05 [13904] ERROR:  Trigger no revisado: unexpected en ordenes, función unexpected. Revisar con docs/paypal-inspection.sql antes de adaptar esta migración.
+2026-09-23 00:20:38.062 -05 [13904] CONTEXT:  PL/pgSQL function inline_code_block line 29 at RAISE
+2026-09-23 00:20:38.062 -05 [13904] STATEMENT:  
+	
+	-- Una única fuente de fulfillment: PaymentService transaccional.
+	-- Conservar función y trigger anteriores para proveedores históricos, excluyendo SOLO PAYPAL.
+	-- Cualquier otro trigger de negocio requiere inspección, no se ignora ni se deshabilita.
+	do $$
+	declare t record; ddl text;
+	begin
+	 for t in select tr.*,p.proname,p.prosrc,md5(replace(pg_get_functiondef(p.oid),chr(13),'')) as body_hash,pg_get_triggerdef(tr.oid) as definition
+	   from pg_trigger tr join pg_proc p on p.oid=tr.tgfoid
+	   where not tr.tgisinternal and tr.tgrelid in
+	    ('public.pagos'::regclass,'public.ordenes'::regclass,'public.orden_detalle'::regclass,
+	     'public.videojuegos'::regclass,'public.biblioteca'::regclass,'public.carrito_detalle'::regclass)
+	 loop
+	   if t.proname in ('jjc_backend_only','jjc_paypal_audit') then continue; end if;
+	   -- Generadores leídos en la BD real: respetan las referencias explícitas y no hacen fulfillment.
+	   if (t.proname='generar_numero_orden' and t.tgrelid='public.ordenes'::regclass and t.body_hash='4b62307cd92fe12a48216eec84d84123')
+	     or (t.proname='generar_referencia_pago' and t.tgrelid='public.pagos'::regclass and t.body_hash='ee28ac1fa53824b4fd68b2aaaf30e469') then continue; end if;
+	   -- La auditoría histórica también excluye PAYPAL: jjc_paypal_audit registra una sola transición.
+	   if (t.proname='procesar_pago_aprobado' or
+	       (t.proname='registrar_cambio_estado_pago' and t.body_hash='824d80977f14abab7b55c0396a4331f2'))
+	     and t.tgrelid='public.pagos'::regclass and (t.tgtype & 1)=1 then
+	     if t.definition like '%IS DISTINCT FROM ''PAYPAL''%' then continue; end if;
+	     if t.definition like '% WHEN (%' then
+	       ddl := regexp_replace(t.definition,' WHEN \((.*)\) EXECUTE FUNCTION ',
+	         ' WHEN ((\1) AND (NEW.proveedor IS DISTINCT FROM ''PAYPAL'')) EXECUTE FUNCTION ');
+	     else
+	       ddl := replace(t.definition,' EXECUTE FUNCTION ', ' WHEN (NEW.proveedor IS DISTINCT FROM ''PAYPAL'') EXECUTE FUNCTION ');
+	     end if;
+	     if ddl=t.definition then raise exception 'No se pudo adaptar el trigger %',t.tgname; end if;
+	     execute format('drop trigger %I on public.pagos',t.tgname);
+	     execute ddl;
+	   else
+	     raise exception 'Trigger no revisado: % en %, función %. Revisar con docs/paypal-inspection.sql antes de adaptar esta migración.',
+	       t.tgname,t.tgrelid::regclass,t.proname;
+	   end if;
+	 end loop;
+	end $$
+2026-09-23 00:20:41.343 -05 [24244] ERROR:  Operación reservada al backend de pagos
+2026-09-23 00:20:41.343 -05 [24244] CONTEXT:  PL/pgSQL function jjc_backend_only() line 4 at RAISE
+	SQL function "forge" statement 1
+2026-09-23 00:20:41.343 -05 [24244] STATEMENT:  select public.forge()
+2026-09-23 00:20:42.442 -05 [22700] ERROR:  new row for relation "biblioteca" violates check constraint "reject_fixture"
+2026-09-23 00:20:42.442 -05 [22700] DETAIL:  Failing row contains (1, 1, 1, 1, 2026-09-23 00:20:42.432944-05).
+2026-09-23 00:20:42.442 -05 [22700] STATEMENT:  insert into public.biblioteca(id_usuario,id_videojuego,id_orden)
+	select $1,$2,$3 where not exists(select 1 from public.biblioteca where id_usuario=$4 and id_videojuego=$5)
+	
+2026-09-23 00:24:35.900 -05 [20444] LOG:  checkpoint starting: time
+2026-09-23 00:25:49.982 -05 [20444] LOG:  checkpoint complete: wrote 680 buffers (4.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=72.926 s, sync=0.674 s, total=74.083 s; sync files=1134, longest=0.003 s, average=0.001 s; distance=9411 kB, estimate=9411 kB; lsn=0/4F2ECE8, redo lsn=0/4F2EC58
+2026-09-23 09:02:54.265 -05 [28156] LOG:  received fast shutdown request
+2026-09-23 09:02:54.267 -05 [28156] LOG:  aborting any active transactions
+2026-09-23 09:02:54.280 -05 [28156] LOG:  background worker "logical replication launcher" (PID 14300) exited with exit code 1
+2026-09-23 09:02:54.282 -05 [20444] LOG:  shutting down
+2026-09-23 09:02:54.284 -05 [20444] LOG:  checkpoint starting: shutdown immediate
+2026-09-23 09:02:54.299 -05 [20444] LOG:  checkpoint complete: wrote 0 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.017 s; sync files=0, longest=0.000 s, average=0.000 s; distance=0 kB, estimate=8470 kB; lsn=0/4F2ED98, redo lsn=0/4F2ED98
+2026-09-23 09:02:54.322 -05 [28156] LOG:  database system is shut down

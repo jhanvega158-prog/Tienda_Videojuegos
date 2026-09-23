@@ -1,0 +1,6 @@
+select jsonb_pretty(jsonb_build_object(
+ 'columns',(select jsonb_agg(to_jsonb(c)) from (select table_name,column_name,data_type,udt_name,is_nullable,column_default,character_maximum_length from information_schema.columns where table_schema='public' and table_name in ('usuarios','carritos','carrito_detalle','ordenes','orden_detalle','pagos','biblioteca','auditoria_pagos') order by table_name,ordinal_position)c),
+ 'constraints',(select jsonb_agg(jsonb_build_object('table',conrelid::regclass::text,'name',conname,'definition',pg_get_constraintdef(oid))) from pg_constraint where connamespace='public'::regnamespace),
+ 'triggers',(select jsonb_agg(jsonb_build_object('table',t.tgrelid::regclass::text,'trigger',t.tgname,'definition',pg_get_triggerdef(t.oid),'function',p.proname,'body',pg_get_functiondef(p.oid))) from pg_trigger t join pg_proc p on p.oid=t.tgfoid where not t.tgisinternal and t.tgrelid in ('public.pagos'::regclass,'public.ordenes'::regclass,'public.orden_detalle'::regclass,'public.videojuegos'::regclass,'public.biblioteca'::regclass,'public.carrito_detalle'::regclass)),
+ 'policies',(select jsonb_agg(to_jsonb(p)) from pg_policies p where schemaname='public')
+))

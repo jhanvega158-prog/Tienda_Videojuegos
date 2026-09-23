@@ -1,0 +1,1147 @@
+{
+    "columns": [
+        {
+            "udt_name": "int4",
+            "data_type": "integer",
+            "table_name": "auditoria_pagos",
+            "column_name": "id",
+            "is_nullable": "NO",
+            "column_default": "nextval('auditoria_pagos_id_seq'::regclass)",
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "int4",
+            "data_type": "integer",
+            "table_name": "auditoria_pagos",
+            "column_name": "id_pago",
+            "is_nullable": "NO",
+            "column_default": null,
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "varchar",
+            "data_type": "character varying",
+            "table_name": "auditoria_pagos",
+            "column_name": "estado_anterior",
+            "is_nullable": "YES",
+            "column_default": null,
+            "character_maximum_length": 30
+        },
+        {
+            "udt_name": "varchar",
+            "data_type": "character varying",
+            "table_name": "auditoria_pagos",
+            "column_name": "estado_nuevo",
+            "is_nullable": "NO",
+            "column_default": null,
+            "character_maximum_length": 30
+        },
+        {
+            "udt_name": "varchar",
+            "data_type": "character varying",
+            "table_name": "auditoria_pagos",
+            "column_name": "descripcion",
+            "is_nullable": "YES",
+            "column_default": null,
+            "character_maximum_length": 255
+        },
+        {
+            "udt_name": "timestamp",
+            "data_type": "timestamp without time zone",
+            "table_name": "auditoria_pagos",
+            "column_name": "fecha",
+            "is_nullable": "NO",
+            "column_default": "CURRENT_TIMESTAMP",
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "int4",
+            "data_type": "integer",
+            "table_name": "biblioteca",
+            "column_name": "id",
+            "is_nullable": "NO",
+            "column_default": "nextval('biblioteca_id_seq'::regclass)",
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "int4",
+            "data_type": "integer",
+            "table_name": "biblioteca",
+            "column_name": "id_usuario",
+            "is_nullable": "NO",
+            "column_default": null,
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "int4",
+            "data_type": "integer",
+            "table_name": "biblioteca",
+            "column_name": "id_videojuego",
+            "is_nullable": "NO",
+            "column_default": null,
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "int4",
+            "data_type": "integer",
+            "table_name": "biblioteca",
+            "column_name": "id_orden",
+            "is_nullable": "NO",
+            "column_default": null,
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "timestamp",
+            "data_type": "timestamp without time zone",
+            "table_name": "biblioteca",
+            "column_name": "fecha_adquisicion",
+            "is_nullable": "YES",
+            "column_default": "CURRENT_TIMESTAMP",
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "bool",
+            "data_type": "boolean",
+            "table_name": "biblioteca",
+            "column_name": "activo",
+            "is_nullable": "NO",
+            "column_default": "true",
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "int4",
+            "data_type": "integer",
+            "table_name": "carrito_detalle",
+            "column_name": "id",
+            "is_nullable": "NO",
+            "column_default": "nextval('carrito_detalle_id_seq'::regclass)",
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "int4",
+            "data_type": "integer",
+            "table_name": "carrito_detalle",
+            "column_name": "id_carrito",
+            "is_nullable": "NO",
+            "column_default": null,
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "int4",
+            "data_type": "integer",
+            "table_name": "carrito_detalle",
+            "column_name": "id_videojuego",
+            "is_nullable": "NO",
+            "column_default": null,
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "int4",
+            "data_type": "integer",
+            "table_name": "carrito_detalle",
+            "column_name": "cantidad",
+            "is_nullable": "NO",
+            "column_default": "1",
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "int4",
+            "data_type": "integer",
+            "table_name": "carritos",
+            "column_name": "id",
+            "is_nullable": "NO",
+            "column_default": "nextval('carritos_id_seq'::regclass)",
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "int4",
+            "data_type": "integer",
+            "table_name": "carritos",
+            "column_name": "id_usuario",
+            "is_nullable": "NO",
+            "column_default": null,
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "timestamp",
+            "data_type": "timestamp without time zone",
+            "table_name": "carritos",
+            "column_name": "fecha_creacion",
+            "is_nullable": "YES",
+            "column_default": "CURRENT_TIMESTAMP",
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "timestamp",
+            "data_type": "timestamp without time zone",
+            "table_name": "carritos",
+            "column_name": "fecha_actualizacion",
+            "is_nullable": "YES",
+            "column_default": "CURRENT_TIMESTAMP",
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "int4",
+            "data_type": "integer",
+            "table_name": "orden_detalle",
+            "column_name": "id",
+            "is_nullable": "NO",
+            "column_default": "nextval('orden_detalle_id_seq'::regclass)",
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "int4",
+            "data_type": "integer",
+            "table_name": "orden_detalle",
+            "column_name": "id_orden",
+            "is_nullable": "NO",
+            "column_default": null,
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "int4",
+            "data_type": "integer",
+            "table_name": "orden_detalle",
+            "column_name": "id_videojuego",
+            "is_nullable": "NO",
+            "column_default": null,
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "varchar",
+            "data_type": "character varying",
+            "table_name": "orden_detalle",
+            "column_name": "nombre_videojuego",
+            "is_nullable": "NO",
+            "column_default": null,
+            "character_maximum_length": 150
+        },
+        {
+            "udt_name": "int4",
+            "data_type": "integer",
+            "table_name": "orden_detalle",
+            "column_name": "cantidad",
+            "is_nullable": "NO",
+            "column_default": null,
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "numeric",
+            "data_type": "numeric",
+            "table_name": "orden_detalle",
+            "column_name": "precio_unitario",
+            "is_nullable": "NO",
+            "column_default": null,
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "numeric",
+            "data_type": "numeric",
+            "table_name": "orden_detalle",
+            "column_name": "subtotal",
+            "is_nullable": "NO",
+            "column_default": null,
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "int4",
+            "data_type": "integer",
+            "table_name": "ordenes",
+            "column_name": "id",
+            "is_nullable": "NO",
+            "column_default": "nextval('ordenes_id_seq'::regclass)",
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "varchar",
+            "data_type": "character varying",
+            "table_name": "ordenes",
+            "column_name": "numero_orden",
+            "is_nullable": "NO",
+            "column_default": null,
+            "character_maximum_length": 50
+        },
+        {
+            "udt_name": "int4",
+            "data_type": "integer",
+            "table_name": "ordenes",
+            "column_name": "id_usuario",
+            "is_nullable": "NO",
+            "column_default": null,
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "timestamp",
+            "data_type": "timestamp without time zone",
+            "table_name": "ordenes",
+            "column_name": "fecha",
+            "is_nullable": "NO",
+            "column_default": "CURRENT_TIMESTAMP",
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "numeric",
+            "data_type": "numeric",
+            "table_name": "ordenes",
+            "column_name": "subtotal",
+            "is_nullable": "NO",
+            "column_default": "0",
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "numeric",
+            "data_type": "numeric",
+            "table_name": "ordenes",
+            "column_name": "iva",
+            "is_nullable": "NO",
+            "column_default": "0",
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "numeric",
+            "data_type": "numeric",
+            "table_name": "ordenes",
+            "column_name": "total",
+            "is_nullable": "NO",
+            "column_default": "0",
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "varchar",
+            "data_type": "character varying",
+            "table_name": "ordenes",
+            "column_name": "estado",
+            "is_nullable": "NO",
+            "column_default": "'PENDIENTE'::character varying",
+            "character_maximum_length": 30
+        },
+        {
+            "udt_name": "int4",
+            "data_type": "integer",
+            "table_name": "pagos",
+            "column_name": "id",
+            "is_nullable": "NO",
+            "column_default": "nextval('pagos_id_seq'::regclass)",
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "int4",
+            "data_type": "integer",
+            "table_name": "pagos",
+            "column_name": "id_orden",
+            "is_nullable": "NO",
+            "column_default": null,
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "varchar",
+            "data_type": "character varying",
+            "table_name": "pagos",
+            "column_name": "referencia",
+            "is_nullable": "NO",
+            "column_default": null,
+            "character_maximum_length": 100
+        },
+        {
+            "udt_name": "varchar",
+            "data_type": "character varying",
+            "table_name": "pagos",
+            "column_name": "metodo_pago",
+            "is_nullable": "NO",
+            "column_default": null,
+            "character_maximum_length": 30
+        },
+        {
+            "udt_name": "numeric",
+            "data_type": "numeric",
+            "table_name": "pagos",
+            "column_name": "monto",
+            "is_nullable": "NO",
+            "column_default": null,
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "varchar",
+            "data_type": "character varying",
+            "table_name": "pagos",
+            "column_name": "estado",
+            "is_nullable": "NO",
+            "column_default": "'PENDIENTE'::character varying",
+            "character_maximum_length": 30
+        },
+        {
+            "udt_name": "timestamp",
+            "data_type": "timestamp without time zone",
+            "table_name": "pagos",
+            "column_name": "fecha_pago",
+            "is_nullable": "YES",
+            "column_default": null,
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "timestamp",
+            "data_type": "timestamp without time zone",
+            "table_name": "pagos",
+            "column_name": "fecha_creacion",
+            "is_nullable": "YES",
+            "column_default": "CURRENT_TIMESTAMP",
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "varchar",
+            "data_type": "character varying",
+            "table_name": "pagos",
+            "column_name": "ultimos_4_digitos",
+            "is_nullable": "YES",
+            "column_default": null,
+            "character_maximum_length": 4
+        },
+        {
+            "udt_name": "varchar",
+            "data_type": "character varying",
+            "table_name": "pagos",
+            "column_name": "proveedor",
+            "is_nullable": "YES",
+            "column_default": "'PAYPHONE'::character varying",
+            "character_maximum_length": 30
+        },
+        {
+            "udt_name": "varchar",
+            "data_type": "character varying",
+            "table_name": "pagos",
+            "column_name": "payphone_transaction_id",
+            "is_nullable": "YES",
+            "column_default": null,
+            "character_maximum_length": 150
+        },
+        {
+            "udt_name": "varchar",
+            "data_type": "character varying",
+            "table_name": "pagos",
+            "column_name": "client_transaction_id",
+            "is_nullable": "YES",
+            "column_default": null,
+            "character_maximum_length": 15
+        },
+        {
+            "udt_name": "varchar",
+            "data_type": "character varying",
+            "table_name": "pagos",
+            "column_name": "codigo_autorizacion",
+            "is_nullable": "YES",
+            "column_default": null,
+            "character_maximum_length": 100
+        },
+        {
+            "udt_name": "text",
+            "data_type": "text",
+            "table_name": "pagos",
+            "column_name": "mensaje_respuesta",
+            "is_nullable": "YES",
+            "column_default": null,
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "timestamp",
+            "data_type": "timestamp without time zone",
+            "table_name": "pagos",
+            "column_name": "fecha_confirmacion",
+            "is_nullable": "YES",
+            "column_default": null,
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "jsonb",
+            "data_type": "jsonb",
+            "table_name": "pagos",
+            "column_name": "datos_respuesta",
+            "is_nullable": "YES",
+            "column_default": null,
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "int4",
+            "data_type": "integer",
+            "table_name": "usuarios",
+            "column_name": "id",
+            "is_nullable": "NO",
+            "column_default": "nextval('usuarios_id_seq'::regclass)",
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "varchar",
+            "data_type": "character varying",
+            "table_name": "usuarios",
+            "column_name": "nombre",
+            "is_nullable": "NO",
+            "column_default": null,
+            "character_maximum_length": 100
+        },
+        {
+            "udt_name": "varchar",
+            "data_type": "character varying",
+            "table_name": "usuarios",
+            "column_name": "apellido",
+            "is_nullable": "NO",
+            "column_default": null,
+            "character_maximum_length": 100
+        },
+        {
+            "udt_name": "varchar",
+            "data_type": "character varying",
+            "table_name": "usuarios",
+            "column_name": "correo",
+            "is_nullable": "NO",
+            "column_default": null,
+            "character_maximum_length": 150
+        },
+        {
+            "udt_name": "varchar",
+            "data_type": "character varying",
+            "table_name": "usuarios",
+            "column_name": "telefono",
+            "is_nullable": "YES",
+            "column_default": null,
+            "character_maximum_length": 20
+        },
+        {
+            "udt_name": "int4",
+            "data_type": "integer",
+            "table_name": "usuarios",
+            "column_name": "id_rol",
+            "is_nullable": "NO",
+            "column_default": null,
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "bool",
+            "data_type": "boolean",
+            "table_name": "usuarios",
+            "column_name": "activo",
+            "is_nullable": "NO",
+            "column_default": "true",
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "timestamp",
+            "data_type": "timestamp without time zone",
+            "table_name": "usuarios",
+            "column_name": "fecha_registro",
+            "is_nullable": "NO",
+            "column_default": "CURRENT_TIMESTAMP",
+            "character_maximum_length": null
+        },
+        {
+            "udt_name": "uuid",
+            "data_type": "uuid",
+            "table_name": "usuarios",
+            "column_name": "auth_id",
+            "is_nullable": "YES",
+            "column_default": null,
+            "character_maximum_length": null
+        }
+    ],
+    "policies": [
+        {
+            "cmd": "ALL",
+            "qual": "es_admin()",
+            "roles": [
+                "authenticated"
+            ],
+            "tablename": "videojuegos",
+            "permissive": "PERMISSIVE",
+            "policyname": "Admin administra videojuegos",
+            "schemaname": "public",
+            "with_check": "es_admin()"
+        },
+        {
+            "cmd": "SELECT",
+            "qual": "(activo = true)",
+            "roles": [
+                "anon",
+                "authenticated"
+            ],
+            "tablename": "videojuegos",
+            "permissive": "PERMISSIVE",
+            "policyname": "Catalogo videojuegos publico",
+            "schemaname": "public",
+            "with_check": null
+        },
+        {
+            "cmd": "SELECT",
+            "qual": "( SELECT es_admin() AS es_admin)",
+            "roles": [
+                "authenticated"
+            ],
+            "tablename": "roles",
+            "permissive": "PERMISSIVE",
+            "policyname": "jjc_admin_select_roles",
+            "schemaname": "public",
+            "with_check": null
+        },
+        {
+            "cmd": "SELECT",
+            "qual": "(auth_id = auth.uid())",
+            "roles": [
+                "authenticated"
+            ],
+            "tablename": "usuarios",
+            "permissive": "PERMISSIVE",
+            "policyname": "Usuario puede ver su perfil",
+            "schemaname": "public",
+            "with_check": null
+        },
+        {
+            "cmd": "SELECT",
+            "qual": "( SELECT es_admin() AS es_admin)",
+            "roles": [
+                "authenticated"
+            ],
+            "tablename": "usuarios",
+            "permissive": "PERMISSIVE",
+            "policyname": "jjc_admin_select_usuarios",
+            "schemaname": "public",
+            "with_check": null
+        },
+        {
+            "cmd": "ALL",
+            "qual": "es_admin()",
+            "roles": [
+                "authenticated"
+            ],
+            "tablename": "categorias",
+            "permissive": "PERMISSIVE",
+            "policyname": "Admin administra categorias",
+            "schemaname": "public",
+            "with_check": "es_admin()"
+        },
+        {
+            "cmd": "SELECT",
+            "qual": "(activo = true)",
+            "roles": [
+                "anon",
+                "authenticated"
+            ],
+            "tablename": "categorias",
+            "permissive": "PERMISSIVE",
+            "policyname": "Catalogo categorias publico",
+            "schemaname": "public",
+            "with_check": null
+        },
+        {
+            "cmd": "SELECT",
+            "qual": "es_admin()",
+            "roles": [
+                "authenticated"
+            ],
+            "tablename": "auditoria_pagos",
+            "permissive": "PERMISSIVE",
+            "policyname": "Solo admin puede ver auditoria",
+            "schemaname": "public",
+            "with_check": null
+        },
+        {
+            "cmd": "UPDATE",
+            "qual": "(id_usuario = ( SELECT usuarios.id\n   FROM usuarios\n  WHERE (usuarios.auth_id = auth.uid())))",
+            "roles": [
+                "authenticated"
+            ],
+            "tablename": "carritos",
+            "permissive": "PERMISSIVE",
+            "policyname": "Usuario puede actualizar carrito",
+            "schemaname": "public",
+            "with_check": null
+        },
+        {
+            "cmd": "INSERT",
+            "qual": null,
+            "roles": [
+                "authenticated"
+            ],
+            "tablename": "carritos",
+            "permissive": "PERMISSIVE",
+            "policyname": "Usuario puede crear carrito",
+            "schemaname": "public",
+            "with_check": "(id_usuario = ( SELECT usuarios.id\n   FROM usuarios\n  WHERE (usuarios.auth_id = auth.uid())))"
+        },
+        {
+            "cmd": "DELETE",
+            "qual": "(id_usuario = ( SELECT usuarios.id\n   FROM usuarios\n  WHERE (usuarios.auth_id = auth.uid())))",
+            "roles": [
+                "authenticated"
+            ],
+            "tablename": "carritos",
+            "permissive": "PERMISSIVE",
+            "policyname": "Usuario puede eliminar carrito",
+            "schemaname": "public",
+            "with_check": null
+        },
+        {
+            "cmd": "SELECT",
+            "qual": "(id_usuario = ( SELECT usuarios.id\n   FROM usuarios\n  WHERE (usuarios.auth_id = auth.uid())))",
+            "roles": [
+                "authenticated"
+            ],
+            "tablename": "carritos",
+            "permissive": "PERMISSIVE",
+            "policyname": "Usuario puede ver carrito",
+            "schemaname": "public",
+            "with_check": null
+        },
+        {
+            "cmd": "ALL",
+            "qual": "(EXISTS ( SELECT 1\n   FROM (carritos c\n     JOIN usuarios u ON ((u.id = c.id_usuario)))\n  WHERE ((c.id = carrito_detalle.id_carrito) AND (u.auth_id = auth.uid()))))",
+            "roles": [
+                "authenticated"
+            ],
+            "tablename": "carrito_detalle",
+            "permissive": "PERMISSIVE",
+            "policyname": "Usuario administra detalle carrito",
+            "schemaname": "public",
+            "with_check": "(EXISTS ( SELECT 1\n   FROM (carritos c\n     JOIN usuarios u ON ((u.id = c.id_usuario)))\n  WHERE ((c.id = carrito_detalle.id_carrito) AND (u.auth_id = auth.uid()))))"
+        },
+        {
+            "cmd": "INSERT",
+            "qual": null,
+            "roles": [
+                "authenticated"
+            ],
+            "tablename": "favoritos",
+            "permissive": "PERMISSIVE",
+            "policyname": "Usuario puede agregar favoritos",
+            "schemaname": "public",
+            "with_check": "(id_usuario = ( SELECT usuarios.id\n   FROM usuarios\n  WHERE (usuarios.auth_id = auth.uid())))"
+        },
+        {
+            "cmd": "DELETE",
+            "qual": "(id_usuario = ( SELECT usuarios.id\n   FROM usuarios\n  WHERE (usuarios.auth_id = auth.uid())))",
+            "roles": [
+                "authenticated"
+            ],
+            "tablename": "favoritos",
+            "permissive": "PERMISSIVE",
+            "policyname": "Usuario puede eliminar favoritos",
+            "schemaname": "public",
+            "with_check": null
+        },
+        {
+            "cmd": "SELECT",
+            "qual": "(id_usuario = ( SELECT usuarios.id\n   FROM usuarios\n  WHERE (usuarios.auth_id = auth.uid())))",
+            "roles": [
+                "authenticated"
+            ],
+            "tablename": "favoritos",
+            "permissive": "PERMISSIVE",
+            "policyname": "Usuario puede ver favoritos",
+            "schemaname": "public",
+            "with_check": null
+        },
+        {
+            "cmd": "UPDATE",
+            "qual": "es_admin()",
+            "roles": [
+                "authenticated"
+            ],
+            "tablename": "ordenes",
+            "permissive": "PERMISSIVE",
+            "policyname": "Admin puede actualizar ordenes",
+            "schemaname": "public",
+            "with_check": "es_admin()"
+        },
+        {
+            "cmd": "INSERT",
+            "qual": null,
+            "roles": [
+                "authenticated"
+            ],
+            "tablename": "ordenes",
+            "permissive": "PERMISSIVE",
+            "policyname": "Cliente puede crear sus ordenes",
+            "schemaname": "public",
+            "with_check": "(id_usuario = ( SELECT usuarios.id\n   FROM usuarios\n  WHERE (usuarios.auth_id = auth.uid())))"
+        },
+        {
+            "cmd": "SELECT",
+            "qual": "((id_usuario = ( SELECT usuarios.id\n   FROM usuarios\n  WHERE (usuarios.auth_id = auth.uid()))) OR es_admin())",
+            "roles": [
+                "authenticated"
+            ],
+            "tablename": "ordenes",
+            "permissive": "PERMISSIVE",
+            "policyname": "Cliente puede ver sus ordenes",
+            "schemaname": "public",
+            "with_check": null
+        },
+        {
+            "cmd": "INSERT",
+            "qual": null,
+            "roles": [
+                "authenticated"
+            ],
+            "tablename": "orden_detalle",
+            "permissive": "PERMISSIVE",
+            "policyname": "Cliente puede crear detalle de sus ordenes",
+            "schemaname": "public",
+            "with_check": "(EXISTS ( SELECT 1\n   FROM (ordenes o\n     JOIN usuarios u ON ((u.id = o.id_usuario)))\n  WHERE ((o.id = orden_detalle.id_orden) AND (u.auth_id = auth.uid()))))"
+        },
+        {
+            "cmd": "SELECT",
+            "qual": "(EXISTS ( SELECT 1\n   FROM (ordenes o\n     JOIN usuarios u ON ((u.id = o.id_usuario)))\n  WHERE ((o.id = orden_detalle.id_orden) AND ((u.auth_id = auth.uid()) OR es_admin()))))",
+            "roles": [
+                "authenticated"
+            ],
+            "tablename": "orden_detalle",
+            "permissive": "PERMISSIVE",
+            "policyname": "Cliente puede ver detalle de sus ordenes",
+            "schemaname": "public",
+            "with_check": null
+        },
+        {
+            "cmd": "INSERT",
+            "qual": null,
+            "roles": [
+                "authenticated"
+            ],
+            "tablename": "biblioteca",
+            "permissive": "PERMISSIVE",
+            "policyname": "Admin puede insertar biblioteca",
+            "schemaname": "public",
+            "with_check": "es_admin()"
+        },
+        {
+            "cmd": "SELECT",
+            "qual": "((id_usuario = ( SELECT usuarios.id\n   FROM usuarios\n  WHERE (usuarios.auth_id = auth.uid()))) OR es_admin())",
+            "roles": [
+                "authenticated"
+            ],
+            "tablename": "biblioteca",
+            "permissive": "PERMISSIVE",
+            "policyname": "Cliente puede ver su biblioteca",
+            "schemaname": "public",
+            "with_check": null
+        },
+        {
+            "cmd": "UPDATE",
+            "qual": "es_admin()",
+            "roles": [
+                "authenticated"
+            ],
+            "tablename": "pagos",
+            "permissive": "PERMISSIVE",
+            "policyname": "Admin puede actualizar pagos",
+            "schemaname": "public",
+            "with_check": "es_admin()"
+        },
+        {
+            "cmd": "INSERT",
+            "qual": null,
+            "roles": [
+                "authenticated"
+            ],
+            "tablename": "pagos",
+            "permissive": "PERMISSIVE",
+            "policyname": "Cliente puede registrar sus pagos",
+            "schemaname": "public",
+            "with_check": "(EXISTS ( SELECT 1\n   FROM (ordenes o\n     JOIN usuarios u ON ((u.id = o.id_usuario)))\n  WHERE ((o.id = pagos.id_orden) AND (u.auth_id = auth.uid()))))"
+        },
+        {
+            "cmd": "SELECT",
+            "qual": "(EXISTS ( SELECT 1\n   FROM (ordenes o\n     JOIN usuarios u ON ((u.id = o.id_usuario)))\n  WHERE ((o.id = pagos.id_orden) AND ((u.auth_id = auth.uid()) OR es_admin()))))",
+            "roles": [
+                "authenticated"
+            ],
+            "tablename": "pagos",
+            "permissive": "PERMISSIVE",
+            "policyname": "Cliente puede ver sus pagos",
+            "schemaname": "public",
+            "with_check": null
+        }
+    ],
+    "triggers": [
+        {
+            "body": "CREATE OR REPLACE FUNCTION public.generar_numero_orden()\n RETURNS trigger\n LANGUAGE plpgsql\nAS $function$\r\nBEGIN\r\n\r\n    IF NEW.numero_orden IS NULL\r\n       OR TRIM(NEW.numero_orden) = '' THEN\r\n\r\n        NEW.numero_orden :=\r\n            'ORD-' ||\r\n            TO_CHAR(CURRENT_TIMESTAMP, 'YYYYMMDD') ||\r\n            '-' ||\r\n            LPAD(\r\n                nextval('numero_orden_seq')::TEXT,\r\n                6,\r\n                '0'\r\n            );\r\n\r\n    END IF;\r\n\r\n    RETURN NEW;\r\nEND;\r\n$function$\n",
+            "table": "ordenes",
+            "trigger": "trigger_generar_numero_orden",
+            "function": "generar_numero_orden",
+            "definition": "CREATE TRIGGER trigger_generar_numero_orden BEFORE INSERT ON public.ordenes FOR EACH ROW EXECUTE FUNCTION generar_numero_orden()"
+        },
+        {
+            "body": "CREATE OR REPLACE FUNCTION public.registrar_cambio_estado_pago()\n RETURNS trigger\n LANGUAGE plpgsql\nAS $function$\r\nBEGIN\r\n\r\n    IF OLD.estado IS DISTINCT FROM NEW.estado THEN\r\n\r\n        INSERT INTO auditoria_pagos (\r\n            id_pago,\r\n            estado_anterior,\r\n            estado_nuevo,\r\n            descripcion\r\n        )\r\n        VALUES (\r\n            NEW.id,\r\n            OLD.estado,\r\n            NEW.estado,\r\n            'Cambio de estado del pago'\r\n        );\r\n\r\n    END IF;\r\n\r\n    RETURN NEW;\r\nEND;\r\n$function$\n",
+            "table": "pagos",
+            "trigger": "trigger_auditoria_pago",
+            "function": "registrar_cambio_estado_pago",
+            "definition": "CREATE TRIGGER trigger_auditoria_pago AFTER UPDATE OF estado ON public.pagos FOR EACH ROW EXECUTE FUNCTION registrar_cambio_estado_pago()"
+        },
+        {
+            "body": "CREATE OR REPLACE FUNCTION public.generar_referencia_pago()\n RETURNS trigger\n LANGUAGE plpgsql\nAS $function$\r\nBEGIN\r\n\r\n    IF NEW.referencia IS NULL\r\n       OR TRIM(NEW.referencia) = '' THEN\r\n\r\n        NEW.referencia :=\r\n            'PAY-' ||\r\n            TO_CHAR(CURRENT_TIMESTAMP, 'YYYYMMDD') ||\r\n            '-' ||\r\n            LPAD(\r\n                nextval('referencia_pago_seq')::TEXT,\r\n                6,\r\n                '0'\r\n            );\r\n\r\n    END IF;\r\n\r\n    RETURN NEW;\r\nEND;\r\n$function$\n",
+            "table": "pagos",
+            "trigger": "trigger_generar_referencia_pago",
+            "function": "generar_referencia_pago",
+            "definition": "CREATE TRIGGER trigger_generar_referencia_pago BEFORE INSERT ON public.pagos FOR EACH ROW EXECUTE FUNCTION generar_referencia_pago()"
+        },
+        {
+            "body": "CREATE OR REPLACE FUNCTION public.procesar_pago_aprobado()\n RETURNS trigger\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\r\nDECLARE\r\n    detalle RECORD;\r\n    usuario_compra INTEGER;\r\nBEGIN\r\n\r\n    -- Solo procesar cuando el pago cambie a PAGADO\r\n    IF NEW.estado = 'PAGADO'\r\n       AND OLD.estado IS DISTINCT FROM 'PAGADO' THEN\r\n\r\n        -- Obtener usuario dueño de la orden\r\n        SELECT id_usuario\r\n        INTO usuario_compra\r\n        FROM public.ordenes\r\n        WHERE id = NEW.id_orden;\r\n\r\n        IF usuario_compra IS NULL THEN\r\n            RAISE EXCEPTION 'No se encontró el usuario de la orden';\r\n        END IF;\r\n\r\n        -- Cambiar orden a PAGADA\r\n        UPDATE public.ordenes\r\n        SET estado = 'PAGADA'\r\n        WHERE id = NEW.id_orden;\r\n\r\n        -- Recorrer los productos comprados\r\n        FOR detalle IN\r\n            SELECT\r\n                id_videojuego,\r\n                cantidad\r\n            FROM public.orden_detalle\r\n            WHERE id_orden = NEW.id_orden\r\n        LOOP\r\n\r\n            -- Verificar stock\r\n            IF (\r\n                SELECT stock\r\n                FROM public.videojuegos\r\n                WHERE id = detalle.id_videojuego\r\n            ) < detalle.cantidad THEN\r\n\r\n                RAISE EXCEPTION\r\n                'Stock insuficiente para el videojuego ID %',\r\n                detalle.id_videojuego;\r\n\r\n            END IF;\r\n\r\n            -- Descontar stock\r\n            UPDATE public.videojuegos\r\n            SET stock = stock - detalle.cantidad\r\n            WHERE id = detalle.id_videojuego;\r\n\r\n            -- Agregar juego a biblioteca\r\n            INSERT INTO public.biblioteca (\r\n                id_usuario,\r\n                id_videojuego,\r\n                id_orden,\r\n                fecha_adquisicion,\r\n                activo\r\n            )\r\n            VALUES (\r\n                usuario_compra,\r\n                detalle.id_videojuego,\r\n                NEW.id_orden,\r\n                CURRENT_TIMESTAMP,\r\n                TRUE\r\n            )\r\n            ON CONFLICT (id_usuario, id_videojuego)\r\n            DO NOTHING;\r\n\r\n        END LOOP;\r\n\r\n        -- Vaciar carrito después de compra exitosa\r\n        DELETE FROM public.carrito_detalle\r\n        WHERE id_carrito = (\r\n            SELECT id\r\n            FROM public.carritos\r\n            WHERE id_usuario = usuario_compra\r\n        );\r\n\r\n        -- Registrar fecha del pago\r\n        NEW.fecha_pago := CURRENT_TIMESTAMP;\r\n\r\n    END IF;\r\n\r\n    RETURN NEW;\r\nEND;\r\n$function$\n",
+            "table": "pagos",
+            "trigger": "trigger_procesar_pago_aprobado",
+            "function": "procesar_pago_aprobado",
+            "definition": "CREATE TRIGGER trigger_procesar_pago_aprobado BEFORE UPDATE OF estado ON public.pagos FOR EACH ROW EXECUTE FUNCTION procesar_pago_aprobado()"
+        }
+    ],
+    "constraints": [
+        {
+            "name": "auditoria_pagos_pkey",
+            "table": "auditoria_pagos",
+            "definition": "PRIMARY KEY (id)"
+        },
+        {
+            "name": "biblioteca_pkey",
+            "table": "biblioteca",
+            "definition": "PRIMARY KEY (id)"
+        },
+        {
+            "name": "carrito_detalle_cantidad_check",
+            "table": "carrito_detalle",
+            "definition": "CHECK ((cantidad > 0))"
+        },
+        {
+            "name": "carrito_detalle_pkey",
+            "table": "carrito_detalle",
+            "definition": "PRIMARY KEY (id)"
+        },
+        {
+            "name": "carritos_id_usuario_key",
+            "table": "carritos",
+            "definition": "UNIQUE (id_usuario)"
+        },
+        {
+            "name": "carritos_pkey",
+            "table": "carritos",
+            "definition": "PRIMARY KEY (id)"
+        },
+        {
+            "name": "categorias_nombre_key",
+            "table": "categorias",
+            "definition": "UNIQUE (nombre)"
+        },
+        {
+            "name": "categorias_pkey",
+            "table": "categorias",
+            "definition": "PRIMARY KEY (id)"
+        },
+        {
+            "name": "chk_estado_orden",
+            "table": "ordenes",
+            "definition": "CHECK (((estado)::text = ANY ((ARRAY['PENDIENTE'::character varying, 'PAGADA'::character varying, 'CANCELADA'::character varying, 'RECHAZADA'::character varying])::text[])))"
+        },
+        {
+            "name": "chk_estado_pago",
+            "table": "pagos",
+            "definition": "CHECK (((estado)::text = ANY ((ARRAY['PENDIENTE'::character varying, 'PROCESANDO'::character varying, 'PAGADO'::character varying, 'RECHAZADO'::character varying, 'CANCELADO'::character varying, 'REEMBOLSADO'::character varying, 'ERROR'::character varying])::text[])))"
+        },
+        {
+            "name": "chk_metodo_pago",
+            "table": "pagos",
+            "definition": "CHECK (((metodo_pago)::text = ANY ((ARRAY['PAYPHONE'::character varying, 'TARJETA'::character varying, 'TRANSFERENCIA'::character varying, 'SIMULADO'::character varying])::text[])))"
+        },
+        {
+            "name": "favoritos_pkey",
+            "table": "favoritos",
+            "definition": "PRIMARY KEY (id)"
+        },
+        {
+            "name": "fk_auditoria_pago",
+            "table": "auditoria_pagos",
+            "definition": "FOREIGN KEY (id_pago) REFERENCES pagos(id) ON DELETE CASCADE"
+        },
+        {
+            "name": "fk_biblioteca_orden",
+            "table": "biblioteca",
+            "definition": "FOREIGN KEY (id_orden) REFERENCES ordenes(id)"
+        },
+        {
+            "name": "fk_biblioteca_usuario",
+            "table": "biblioteca",
+            "definition": "FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE"
+        },
+        {
+            "name": "fk_biblioteca_videojuego",
+            "table": "biblioteca",
+            "definition": "FOREIGN KEY (id_videojuego) REFERENCES videojuegos(id)"
+        },
+        {
+            "name": "fk_carrito_usuario",
+            "table": "carritos",
+            "definition": "FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE"
+        },
+        {
+            "name": "fk_detalle_carrito",
+            "table": "carrito_detalle",
+            "definition": "FOREIGN KEY (id_carrito) REFERENCES carritos(id) ON DELETE CASCADE"
+        },
+        {
+            "name": "fk_detalle_orden",
+            "table": "orden_detalle",
+            "definition": "FOREIGN KEY (id_orden) REFERENCES ordenes(id) ON DELETE CASCADE"
+        },
+        {
+            "name": "fk_detalle_orden_videojuego",
+            "table": "orden_detalle",
+            "definition": "FOREIGN KEY (id_videojuego) REFERENCES videojuegos(id)"
+        },
+        {
+            "name": "fk_detalle_videojuego",
+            "table": "carrito_detalle",
+            "definition": "FOREIGN KEY (id_videojuego) REFERENCES videojuegos(id)"
+        },
+        {
+            "name": "fk_favorito_usuario",
+            "table": "favoritos",
+            "definition": "FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE"
+        },
+        {
+            "name": "fk_favorito_videojuego",
+            "table": "favoritos",
+            "definition": "FOREIGN KEY (id_videojuego) REFERENCES videojuegos(id) ON DELETE CASCADE"
+        },
+        {
+            "name": "fk_orden_usuario",
+            "table": "ordenes",
+            "definition": "FOREIGN KEY (id_usuario) REFERENCES usuarios(id)"
+        },
+        {
+            "name": "fk_pago_orden",
+            "table": "pagos",
+            "definition": "FOREIGN KEY (id_orden) REFERENCES ordenes(id) ON DELETE CASCADE"
+        },
+        {
+            "name": "fk_usuario_auth",
+            "table": "usuarios",
+            "definition": "FOREIGN KEY (auth_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+        },
+        {
+            "name": "fk_usuario_rol",
+            "table": "usuarios",
+            "definition": "FOREIGN KEY (id_rol) REFERENCES roles(id)"
+        },
+        {
+            "name": "fk_videojuego_categoria",
+            "table": "videojuegos",
+            "definition": "FOREIGN KEY (id_categoria) REFERENCES categorias(id)"
+        },
+        {
+            "name": "orden_detalle_cantidad_check",
+            "table": "orden_detalle",
+            "definition": "CHECK ((cantidad > 0))"
+        },
+        {
+            "name": "orden_detalle_pkey",
+            "table": "orden_detalle",
+            "definition": "PRIMARY KEY (id)"
+        },
+        {
+            "name": "orden_detalle_precio_unitario_check",
+            "table": "orden_detalle",
+            "definition": "CHECK ((precio_unitario >= (0)::numeric))"
+        },
+        {
+            "name": "orden_detalle_subtotal_check",
+            "table": "orden_detalle",
+            "definition": "CHECK ((subtotal >= (0)::numeric))"
+        },
+        {
+            "name": "ordenes_iva_check",
+            "table": "ordenes",
+            "definition": "CHECK ((iva >= (0)::numeric))"
+        },
+        {
+            "name": "ordenes_numero_orden_key",
+            "table": "ordenes",
+            "definition": "UNIQUE (numero_orden)"
+        },
+        {
+            "name": "ordenes_pkey",
+            "table": "ordenes",
+            "definition": "PRIMARY KEY (id)"
+        },
+        {
+            "name": "ordenes_subtotal_check",
+            "table": "ordenes",
+            "definition": "CHECK ((subtotal >= (0)::numeric))"
+        },
+        {
+            "name": "ordenes_total_check",
+            "table": "ordenes",
+            "definition": "CHECK ((total >= (0)::numeric))"
+        },
+        {
+            "name": "pagos_monto_check",
+            "table": "pagos",
+            "definition": "CHECK ((monto >= (0)::numeric))"
+        },
+        {
+            "name": "pagos_pkey",
+            "table": "pagos",
+            "definition": "PRIMARY KEY (id)"
+        },
+        {
+            "name": "pagos_referencia_key",
+            "table": "pagos",
+            "definition": "UNIQUE (referencia)"
+        },
+        {
+            "name": "roles_nombre_key",
+            "table": "roles",
+            "definition": "UNIQUE (nombre)"
+        },
+        {
+            "name": "roles_pkey",
+            "table": "roles",
+            "definition": "PRIMARY KEY (id)"
+        },
+        {
+            "name": "uq_biblioteca_usuario_videojuego",
+            "table": "biblioteca",
+            "definition": "UNIQUE (id_usuario, id_videojuego)"
+        },
+        {
+            "name": "uq_carrito_videojuego",
+            "table": "carrito_detalle",
+            "definition": "UNIQUE (id_carrito, id_videojuego)"
+        },
+        {
+            "name": "uq_favorito",
+            "table": "favoritos",
+            "definition": "UNIQUE (id_usuario, id_videojuego)"
+        },
+        {
+            "name": "usuarios_auth_id_key",
+            "table": "usuarios",
+            "definition": "UNIQUE (auth_id)"
+        },
+        {
+            "name": "usuarios_correo_key",
+            "table": "usuarios",
+            "definition": "UNIQUE (correo)"
+        },
+        {
+            "name": "usuarios_pkey",
+            "table": "usuarios",
+            "definition": "PRIMARY KEY (id)"
+        },
+        {
+            "name": "videojuegos_pkey",
+            "table": "videojuegos",
+            "definition": "PRIMARY KEY (id)"
+        },
+        {
+            "name": "videojuegos_precio_check",
+            "table": "videojuegos",
+            "definition": "CHECK ((precio >= (0)::numeric))"
+        },
+        {
+            "name": "videojuegos_stock_check",
+            "table": "videojuegos",
+            "definition": "CHECK ((stock >= 0))"
+        }
+    ]
+}
