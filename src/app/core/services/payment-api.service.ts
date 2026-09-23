@@ -18,7 +18,8 @@ export class PaymentApi {
         headers,
         body: body === undefined ? undefined : JSON.stringify(body),
         cache: 'no-store',
-        signal: AbortSignal.timeout(60000),
+        // Allow the free backend to start after inactivity without retrying payments.
+        signal: AbortSignal.timeout(120000),
       });
     } catch {
       throw new Error(

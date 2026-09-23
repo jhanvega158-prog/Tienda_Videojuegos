@@ -1,0 +1,12 @@
+# Reference configuration; no service is created until explicitly deployed in Render.
+services:
+  - type: web
+    name: jjc-gaming-web
+    runtime: static
+    branch: master
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist/front_bd2/browser
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
