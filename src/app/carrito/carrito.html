@@ -1,0 +1,88 @@
+﻿<section class="page">
+  <div class="page-head">
+    <span class="eyebrow">UN PASO MÁS CERCA DE JUGAR</span>
+    <h1>Carrito de compras</h1>
+    <p>Revisa tu selección antes de continuar.</p>
+  </div>
+  @if (cart.loading()) {
+    <p role="status">Cargando carrito...</p>
+  }
+  @if (cart.error()) {
+    <p class="error" role="alert">{{ cart.error() }}</p>
+    <button (click)="cart.reload()">Reintentar</button>
+  }
+  <div class="stepper">
+    <span class="current"><b>1</b> Carrito</span><span><b>2</b> Datos de compra</span
+    ><span><b>3</b> Confirmación</span>
+  </div>
+  @if (cart.items().length) {
+    <div class="shopping-layout">
+      <div class="items panel">
+        <div class="items-heading">
+          <h2>Tu selección</h2>
+          <span>{{ cart.count() }} artículos</span>
+        </div>
+        @for (item of cart.items(); track item.game.id) {
+          <article class="cart-item">
+            <a [routerLink]="['/juego', item.game.id]"
+              ><img [src]="item.game.imagen" [alt]="item.game.titulo"
+            /></a>
+            <div class="item-description">
+              <span class="tag">{{ item.game.categoria }}</span>
+              <h3>
+                <a [routerLink]="['/juego', item.game.id]">{{ item.game.titulo }}</a>
+              </h3>
+              <p>{{ item.game.plataforma }} · {{ item.game.precio | currency: 'USD' }} / unidad</p>
+              <button class="link" (click)="cart.remove(item.game.id)">Eliminar</button>
+            </div>
+            <div class="item-pricing">
+              <strong>{{ item.game.precio * item.cantidad | currency: 'USD' }}</strong>
+              <div class="quantity">
+                <button
+                  (click)="cart.change(item.game.id, -1)"
+                  [attr.aria-label]="'Reducir cantidad de ' + item.game.titulo"
+                >
+                  −</button
+                ><span>{{ item.cantidad }}</span
+                ><button
+                  (click)="cart.change(item.game.id, 1)"
+                  [disabled]="item.cantidad >= item.game.stock"
+                  [attr.aria-label]="'Aumentar cantidad de ' + item.game.titulo"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+          </article>
+        }
+        <a routerLink="/catalogo" class="text-link continue-link">← Seguir explorando</a>
+      </div>
+      <aside class="summary">
+        <h2>Resumen de compra</h2>
+        <p>
+          <span>Subtotal</span><b>{{ cart.subtotal() | currency: 'USD' }}</b>
+        </p>
+        <p>
+          <span>IVA (15%)</span><b>{{ cart.iva() | currency: 'USD' }}</b>
+        </p>
+        <hr />
+        <p class="total">
+          <span>Total</span><b>{{ cart.total() | currency: 'USD' }}</b>
+        </p>
+        <a routerLink="/checkout" class="button">Continuar compra <app-icon name="arrow" /></a>
+        <div class="summary-note">
+          <app-icon name="shield" /><span>Revisa todos los detalles antes de confirmar.</span>
+        </div>
+      </aside>
+    </div>
+  } @else if (!cart.loading() && !cart.error()) {
+    <div class="empty">
+      <app-icon name="cart" />
+      <h2>Tu carrito está vacío</h2>
+      <p>
+        Hay un mundo de historias esperando. Encuentra tu próximo juego y agrégalo a tu selección.
+      </p>
+      <a routerLink="/catalogo" class="button">Explorar catálogo <app-icon name="arrow" /></a>
+    </div>
+  }
+</section>

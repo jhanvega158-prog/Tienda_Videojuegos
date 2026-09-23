@@ -1,0 +1,77 @@
+<section class="page">
+  <div class="page-head">
+    <span class="eyebrow">TU AVENTURA, CASI LISTA</span>
+    <h1>Finalizar compra</h1>
+    <p>Revisa tu pedido y paga de forma segura con PayPal.</p>
+  </div>
+  <div class="checkout-grid">
+    <section class="panel">
+      <h2><app-icon name="shield" /> Paga de forma segura con PayPal</h2>
+      <p>Método de pago: <strong>PayPal</strong></p>
+      <p>
+        PayPal gestiona tus datos de pago. La opción de tarjeta aparecerá dentro de PayPal cuando
+        está disponible.
+      </p>
+      <span class="badge">Sandbox · USD</span>
+      @if (loading()) {
+        <p role="status">Cargando PayPal...</p>
+      }
+      @if (message()) {
+        <p role="alert">{{ message() }}</p>
+      }
+      @if (processing()) {
+        <p role="status">Procesando pago...</p>
+      }
+      @if (ready() && (cart.items().length || order()) && !needsCapture()) {
+        <div
+          [style.pointer-events]="processing() ? 'none' : 'auto'"
+          [attr.inert]="processing() ? '' : null"
+        >
+          <paypal-button
+            (click)="pay()"
+            [attr.disabled]="processing() ? '' : null"
+            aria-label="Pagar con PayPal"
+          />
+        </div>
+      }
+      @if (needsCapture()) {
+        <button (click)="capture()" [disabled]="processing()">
+          Consultar / reintentar confirmación
+        </button>
+      }
+      @if (!ready() && !loading()) {
+        <button (click)="initialize()">Intentar nuevamente</button>
+      }
+      <p><a routerLink="/compras" class="text-link">Ver mis compras</a></p>
+    </section>
+    <aside class="summary">
+      <h2>Resumen de compra</h2>
+      @for (item of order()?.productos ?? cart.items(); track item.game.id) {
+        <div class="summary-game">
+          <img [src]="item.game.imagen" [alt]="item.game.titulo" />
+          <div>
+            <strong>{{ item.game.titulo }}</strong
+            ><span>{{ item.cantidad }} × {{ item.game.precio | currency: 'USD' }}</span>
+          </div>
+        </div>
+      } @empty {
+        <p>No hay productos en el carrito.</p>
+      }
+      <hr />
+      <p>
+        Subtotal <b>{{ order()?.subtotal ?? cart.subtotal() | currency: 'USD' }}</b>
+      </p>
+      <p>
+        IVA (15%) <b>{{ order()?.iva ?? cart.iva() | currency: 'USD' }}</b>
+      </p>
+      <p class="total">
+        Total <b>{{ order()?.total ?? cart.total() | currency: 'USD' }}</b>
+      </p>
+      @if (order()) {
+        <p>Orden: {{ order()?.numeroOrden }}</p>
+        <p>El importe de esta orden se confirma en PayPal.</p>
+      }
+      <a routerLink="/carrito" class="text-link">Editar carrito</a>
+    </aside>
+  </div>
+</section>

@@ -1,0 +1,106 @@
+﻿.checkout-grid form h2 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 24px;
+}
+.checkout-grid h2 app-icon {
+  color: #6aa7f7;
+}
+.checkout-grid form > p,
+.payment-heading > p {
+  font-size: 14px;
+}
+.payment-heading {
+  border-top: 1px solid var(--border);
+  padding-top: 28px;
+  margin-top: 32px;
+}
+.payphone-preview {
+  padding: 22px;
+  background: #2563eb0a;
+  border: 1px solid #3b82f630;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+.payphone-preview > div {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.payphone-preview app-icon {
+  color: #86b7fa;
+}
+.payphone-preview strong {
+  font-size: 15px;
+}
+.payphone-preview .badge {
+  margin-left: auto;
+  font-size: 10px;
+}
+.payphone-preview p {
+  font-size: 13px;
+  margin: 14px 0;
+}
+.payphone-preview button {
+  font-size: 13px;
+}
+.payment-option {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  margin: 12px 0;
+  cursor: pointer;
+}
+.payment-option:has(input:checked) {
+  border-color: #3b82f670;
+  background: #2563eb0a;
+}
+.payment-option input {
+  margin: 0;
+  flex: none;
+}
+.payment-option b {
+  display: block;
+  font-size: 14px;
+  color: white;
+}
+.payment-option small {
+  display: block;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--muted);
+  margin-top: 5px;
+}
+.checkout-submit {
+  width: 100%;
+  margin-top: 18px;
+}
+.summary-game {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  margin: 20px 0;
+}
+.summary-game img {
+  width: 74px;
+  aspect-ratio: 16/10;
+  object-fit: cover;
+  border-radius: 6px;
+}
+.summary-game strong {
+  font-size: 13px;
+  line-height: 1.4;
+  display: block;
+}
+.summary-game span {
+  font-size: 12px;
+  color: var(--muted);
+}
+.summary > .text-link {
+  font-size: 13px;
+}

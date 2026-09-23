@@ -1,0 +1,212 @@
+[
+  {
+    "id": 1,
+    "imagen_url": "/images/games/271590.jpg",
+    "nombre": "Grand Theft Auto V",
+    "precio": 29.99,
+    "stock": 50
+  },
+  {
+    "id": 2,
+    "imagen_url": "/images/games/1174180.jpg",
+    "nombre": "Red Dead Redemption 2",
+    "precio": 39.99,
+    "stock": 35
+  },
+  {
+    "id": 3,
+    "imagen_url": "/images/games/3405690.jpg",
+    "nombre": "EA Sports FC 26",
+    "precio": 69.99,
+    "stock": 40
+  },
+  {
+    "id": 4,
+    "imagen_url": "/images/games/1551360.jpg",
+    "nombre": "Forza Horizon 5",
+    "precio": 59.99,
+    "stock": 30
+  },
+  {
+    "id": 5,
+    "imagen_url": "/images/games/292030.jpg",
+    "nombre": "The Witcher 3",
+    "precio": 29.99,
+    "stock": 25
+  },
+  {
+    "id": 6,
+    "imagen_url": "/images/games/2050650.jpg",
+    "nombre": "Resident Evil 4",
+    "precio": 39.99,
+    "stock": 20
+  },
+  {
+    "id": 7,
+    "imagen_url": "/images/games/289070.jpg",
+    "nombre": "Civilization VI",
+    "precio": 19.99,
+    "stock": 20
+  },
+  {
+    "id": 8,
+    "imagen_url": "/images/games/812140.jpg",
+    "nombre": "Assassins Creed Odyssey",
+    "precio": 34.99,
+    "stock": 25
+  },
+  {
+    "id": 11,
+    "imagen_url": "/images/games/1091500.jpg",
+    "nombre": "Cyberpunk 2077",
+    "precio": 59.99,
+    "stock": 0
+  },
+  {
+    "id": 12,
+    "imagen_url": "/images/games/1245620.jpg",
+    "nombre": "ELDEN RING",
+    "precio": 59.99,
+    "stock": 0
+  },
+  {
+    "id": 13,
+    "imagen_url": "/images/games/1593500.jpg",
+    "nombre": "God of War",
+    "precio": 49.99,
+    "stock": 0
+  },
+  {
+    "id": 14,
+    "imagen_url": "/images/games/2322010.jpg",
+    "nombre": "God of War Ragnarök",
+    "precio": 59.99,
+    "stock": 0
+  },
+  {
+    "id": 15,
+    "imagen_url": "/images/games/990080.jpg",
+    "nombre": "Hogwarts Legacy",
+    "precio": 59.99,
+    "stock": 0
+  },
+  {
+    "id": 16,
+    "imagen_url": "/images/games/1086940.jpg",
+    "nombre": "Baldur's Gate 3",
+    "precio": 59.99,
+    "stock": 0
+  },
+  {
+    "id": 17,
+    "imagen_url": "/images/games/1817070.jpg",
+    "nombre": "Marvel’s Spider-Man Remastered",
+    "precio": 59.99,
+    "stock": 0
+  },
+  {
+    "id": 18,
+    "imagen_url": "/images/games/1817190.jpg",
+    "nombre": "Marvel’s Spider-Man: Miles Morales",
+    "precio": 49.99,
+    "stock": 0
+  },
+  {
+    "id": 19,
+    "imagen_url": "/images/games/2561580.jpg",
+    "nombre": "Horizon Zero Dawn™ remasterizado",
+    "precio": 49.99,
+    "stock": 0
+  },
+  {
+    "id": 20,
+    "imagen_url": "/images/games/2420110.jpg",
+    "nombre": "Horizon Forbidden West™ Complete Edition",
+    "precio": 59.99,
+    "stock": 0
+  },
+  {
+    "id": 21,
+    "imagen_url": "/images/games/814380.jpg",
+    "nombre": "Sekiro™: Shadows Die Twice - GOTY Edition",
+    "precio": 59.99,
+    "stock": 0
+  },
+  {
+    "id": 22,
+    "imagen_url": "/images/games/782330.jpg",
+    "nombre": "DOOM Eternal",
+    "precio": 29.99,
+    "stock": 0
+  },
+  {
+    "id": 23,
+    "imagen_url": "/images/games/1145360.jpg",
+    "nombre": "Hades",
+    "precio": 24.99,
+    "stock": 0
+  },
+  {
+    "id": 24,
+    "imagen_url": "/images/games/367520.jpg",
+    "nombre": "Hollow Knight",
+    "precio": 14.99,
+    "stock": 0
+  },
+  {
+    "id": 25,
+    "imagen_url": "/images/games/413150.jpg",
+    "nombre": "Stardew Valley",
+    "precio": 14.99,
+    "stock": 0
+  },
+  {
+    "id": 26,
+    "imagen_url": "/images/games/105600.jpg",
+    "nombre": "Terraria",
+    "precio": 9.99,
+    "stock": 0
+  },
+  {
+    "id": 27,
+    "imagen_url": "/images/games/108600.jpg",
+    "nombre": "Project Zomboid",
+    "precio": 24.99,
+    "stock": 0
+  },
+  {
+    "id": 28,
+    "imagen_url": "/images/games/218620.jpg",
+    "nombre": "PAYDAY 2",
+    "precio": 9.99,
+    "stock": 0
+  },
+  {
+    "id": 29,
+    "imagen_url": "/images/games/359550.jpg",
+    "nombre": "Tom Clancy's Rainbow Six Siege",
+    "precio": 0,
+    "stock": 0
+  },
+  {
+    "id": 30,
+    "imagen_url": "/images/games/1238810.jpg",
+    "nombre": "Battlefield™ V",
+    "precio": 49.99,
+    "stock": 0
+  },
+  {
+    "id": 31,
+    "imagen_url": "/images/games/1466860.jpg",
+    "nombre": "Age of Empires IV: Anniversary Edition",
+    "precio": 39.99,
+    "stock": 0
+  },
+  {
+    "id": 32,
+    "imagen_url": "/images/games/255710.jpg",
+    "nombre": "Cities: Skylines",
+    "precio": 29.99,
+    "stock": 0
+  }
+]

@@ -1,0 +1,95 @@
+﻿<div class="admin-page-heading">
+  <div>
+    <h1>Usuarios</h1>
+    <p>Perfiles y roles reales. Las credenciales no se muestran ni se editan.</p>
+  </div>
+  <button class="ghost" (click)="load()" [disabled]="loading()">Actualizar</button>
+</div>
+@if (error()) {
+  <p class="error" role="alert">{{ error() }}</p>
+}
+@if (success()) {
+  <p class="notice" role="status">{{ success() }}</p>
+}
+@if (coverage()) {
+  <p class="notice" role="status">{{ coverage() }}</p>
+}
+<div class="admin-filters">
+  <label
+    >Buscar<input
+      #q
+      type="search"
+      placeholder="Nombre o correo"
+      (input)="search.set(q.value)" /></label
+  ><label
+    >Rol<select #r (change)="role.set(r.value)">
+      <option value="todos">Todos</option>
+      <option value="1">ADMIN</option>
+      <option value="2">CLIENTE</option>
+    </select></label
+  ><label
+    >Estado<select #s (change)="state.set(s.value)">
+      <option value="todos">Todos</option>
+      <option value="activo">Activos</option>
+      <option value="inactivo">Inactivos</option>
+    </select></label
+  >
+</div>
+@if (loading()) {
+  <p role="status">Cargando usuarios…</p>
+} @else {
+  <div class="admin-table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Correo</th>
+          <th>Teléfono</th>
+          <th>Rol</th>
+          <th>Estado</th>
+          <th>Registro</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (u of filtered(); track u.id) {
+          <tr>
+            <td>{{ u.id }}</td>
+            <td>{{ u.nombre }}</td>
+            <td>{{ u.apellido }}</td>
+            <td>{{ u.correo }}</td>
+            <td>{{ u.telefono || '—' }}</td>
+            <td>{{ u.roles?.nombre || 'Rol ID ' + u.id_rol + ' · nombre no disponible' }}</td>
+            <td>
+              <span class="badge">{{ u.activo ? 'Activo' : 'Inactivo' }}</span>
+            </td>
+            <td>{{ u.fecha_registro | date: 'dd/MM/yyyy' }}</td>
+            <td>
+              @if (u.id === auth.profile()?.id) {
+                <span class="muted">Tu cuenta</span>
+              } @else {
+                <button class="ghost" (click)="toggle(u)" [disabled]="saving()">
+                  {{ u.activo ? 'Desactivar' : 'Activar' }}
+                </button>
+              }
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="9">No hay usuarios con estos filtros.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}
+@if (confirmation(); as action) {
+  <app-admin-confirm
+    [message]="action.message"
+    [busy]="saving()"
+    (accepted)="action.run()"
+    (cancelled)="confirmation.set(null)"
+  />
+}

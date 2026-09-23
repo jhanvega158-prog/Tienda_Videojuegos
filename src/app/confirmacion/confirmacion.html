@@ -1,0 +1,68 @@
+﻿<section class="page confirmation">
+  @if (loading()) {
+    <p role="status">Consultando compra...</p>
+  }
+  @if (error()) {
+    <p role="alert">{{ error() }}</p>
+    <button (click)="load()">Reintentar</button>
+  }
+  @if (purchase(); as p) {
+    <div class="confirmation-heading">
+      <div class="success"><app-icon [name]="p.estadoPago === 'PAGADO' ? 'check' : 'clock'" /></div>
+      <span class="eyebrow">UN NUEVO CAPÍTULO</span>
+      <h1>
+        {{ p.estadoPago === 'PAGADO' ? '¡Pago realizado correctamente!' : 'Pedido registrado' }}
+      </h1>
+      <p>Detalles de tu compra registrados en JJC GAMING.</p>
+      <span class="status" [attr.data-status]="p.estadoPago">{{
+        p.estadoPago === 'PAGADO' ? 'PAGADA' : p.estadoPago
+      }}</span>
+    </div>
+    <div class="receipt">
+      <div class="receipt-head">
+        <div>
+          <small>ORDEN</small>
+          <h2>{{ p.id }}</h2>
+        </div>
+        <span>{{ p.fecha | date: 'dd/MM/yyyy' }}</span>
+      </div>
+      @for (item of p.productos; track item.game.id) {
+        <div class="receipt-item">
+          <img [src]="item.game.imagen" [alt]="item.game.titulo" />
+          <div>
+            <strong>{{ item.game.titulo }}</strong
+            ><span>Cantidad: {{ item.cantidad }}</span>
+          </div>
+          <b>{{ item.game.precio * item.cantidad | currency: 'USD' }}</b>
+        </div>
+      }
+      <hr />
+      <p>
+        Subtotal <b>{{ p.subtotal | currency: 'USD' }}</b>
+      </p>
+      <p>
+        IVA <b>{{ p.iva | currency: 'USD' }}</b>
+      </p>
+      <p class="receipt-total">
+        Total <b>{{ p.total | currency: 'USD' }}</b>
+      </p>
+      <p class="receipt-method">Método: {{ p.metodoPago }}</p>
+    </div>
+    <div class="confirmation-actions">
+      @if (p.paypalOrderId && (p.estadoPago === 'PENDIENTE' || p.estadoPago === 'PROCESANDO')) {
+        <button (click)="checkPayment()" [disabled]="checking()">
+          {{ checking() ? 'Consultando pago...' : 'Confirmar pago aprobado en PayPal' }}
+        </button>
+      }
+      <a routerLink="/compras" class="button">Ver mis compras <app-icon name="bag" /></a
+      ><a routerLink="/biblioteca" class="button ghost">Ir a mi biblioteca</a>
+    </div>
+  } @else {
+    <div class="empty">
+      <app-icon name="bag" />
+      <h1>No hay una compra reciente</h1>
+      <p>Explora el catálogo para encontrar tu próxima aventura.</p>
+      <a routerLink="/catalogo" class="button">Ir al catálogo</a>
+    </div>
+  }
+</section>

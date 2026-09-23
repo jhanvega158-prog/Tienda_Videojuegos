@@ -1,0 +1,134 @@
+﻿<section class="hero" appParallax>
+  <div class="parallax-image" aria-hidden="true"></div>
+  <div class="parallax-overlay" aria-hidden="true"></div>
+  <div class="container hero-content">
+    <div class="hero-copy" appReveal>
+      <span class="hero-label"><span></span> JJC GAMING STORE</span>
+      <h1>Tu próxima aventura<br />empieza <em>aquí.</em></h1>
+      <p>
+        Grandes historias, mundos por descubrir y desafíos que no se olvidan. Encuentra tu próximo
+        juego en JJC Gaming.
+      </p>
+      <div class="hero-actions">
+        <a routerLink="/catalogo" class="button">Explorar catálogo <app-icon name="arrow" /></a
+        ><a href="#ofertas" class="button ghost">Ver ofertas</a>
+      </div>
+      <div class="hero-note">
+        <app-icon name="game" /><span>Para quienes siempre quieren una partida más.</span>
+      </div>
+    </div>
+    <div class="hero-game">
+      <span>EXPLORA UN MUNDO SIN LÍMITES</span><strong>Red Dead Redemption 2</strong
+      ><a [routerLink]="heroGame ? ['/juego', heroGame.id] : ['/catalogo']"
+        >Descubrir el juego <app-icon name="arrow"
+      /></a>
+    </div>
+  </div>
+  <div class="hero-bottom">
+    <span class="active"></span><span></span><span></span><small>EL PRÓXIMO NIVEL TE ESPERA</small>
+  </div>
+</section>
+<div class="discovery-strip">
+  <div class="container">
+    <span><app-icon name="game" />Historias que se quedan contigo</span
+    ><span><app-icon name="compass" />Un mundo para cada jugador</span
+    ><span><app-icon name="bolt" />Tu próxima aventura, a un clic</span>
+  </div>
+</div>
+<section class="container section">
+  <div class="section-heading" appReveal>
+    <div>
+      <span class="eyebrow">ELIGE TU PRÓXIMO RETO</span>
+      <h2>Juegos destacados</h2>
+      <p>Una selección para no soltar el control.</p>
+    </div>
+    <a routerLink="/catalogo" class="text-link">Ver todos los juegos <app-icon name="arrow" /></a>
+  </div>
+  @if (catalog.loading()) {
+    <p role="status">Cargando juegos…</p>
+  }
+  @if (catalog.error()) {
+    <p role="alert" class="error">{{ catalog.error() }}</p>
+    <button (click)="catalog.load()">Reintentar</button>
+  }
+  <div class="game-grid">
+    @for (game of featured; track game.id; let i = $index) {
+      <app-game-card [game]="game" appReveal [revealDelay]="i * 45" />
+    }
+  </div>
+</section>
+<section class="categories-section parallax-glow" appParallax>
+  <div class="container section">
+    <div class="section-heading" appReveal>
+      <div>
+        <span class="eyebrow">JUEGA A TU MANERA</span>
+        <h2>Explora por categoría</h2>
+      </div>
+      <p>Cada jugador tiene su universo.</p>
+    </div>
+    <div class="category-grid">
+      @for (category of categories; track category.name; let i = $index) {
+        <a
+          appReveal
+          class="reveal-fade"
+          [revealDelay]="i * 25"
+          routerLink="/catalogo"
+          [queryParams]="{ categoria: category.name }"
+          ><app-icon [name]="category.icon" /><span>{{ category.name }}</span
+          ><app-icon class="category-arrow" name="arrow"
+        /></a>
+      }
+    </div>
+  </div>
+</section>
+<section class="container section" id="ofertas">
+  <div class="promo" appParallax>
+    <div class="parallax-image" aria-hidden="true"></div>
+    <div class="parallax-overlay" aria-hidden="true"></div>
+    <div>
+      <span class="eyebrow">SAL DE LA RUTINA. ENTRA EN EL JUEGO.</span>
+      <h2>Encuentra tu<br />próxima aventura.</h2>
+      <p>Descubre nuevos mundos, historias y desafíos.</p>
+      <a routerLink="/catalogo" class="button">Explorar catálogo <app-icon name="arrow" /></a
+      ><small>Descubre los precios disponibles en el catálogo.</small>
+    </div>
+    <span class="promo-word parallax-foreground" aria-hidden="true">PLAY<br />MORE.</span>
+  </div>
+</section>
+<section class="container benefits">
+  <article appReveal>
+    <app-icon name="shield" />
+    <div>
+      <h3>Tu cuenta, protegida</h3>
+      <p>Accede con tu correo y mantén el control de tu sesión.</p>
+    </div>
+  </article>
+  <article appReveal>
+    <app-icon name="card" />
+    <div>
+      <h3>Pago con tarjeta <span>Próximamente</span></h3>
+      <p>Estamos preparando la experiencia con PayPhone.</p>
+    </div>
+  </article>
+  <article appReveal>
+    <app-icon name="library" />
+    <div>
+      <h3>Biblioteca digital <span>Próximamente</span></h3>
+      <p>Un espacio pensado para reunir tus aventuras.</p>
+    </div>
+  </article>
+  <article appReveal>
+    <app-icon name="support" />
+    <div>
+      <h3>¿Necesitas ayuda?</h3>
+      <p>Encuentra respuestas en nuestra sección de ayuda.</p>
+      <a href="#ayuda" class="text-link">Consultar ayuda</a>
+    </div>
+  </article>
+</section>
+<section class="final-cta container parallax-glow" appParallax appReveal>
+  <span class="eyebrow">LA PARTIDA APENAS COMIENZA</span>
+  <h2>¿Listo para jugar?</h2>
+  <p>Explora. Descubre. Encuentra ese juego que estabas buscando.</p>
+  <a routerLink="/catalogo" class="button">Explorar juegos <app-icon name="arrow" /></a>
+</section>

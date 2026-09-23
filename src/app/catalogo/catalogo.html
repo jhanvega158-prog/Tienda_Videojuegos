@@ -1,0 +1,58 @@
+﻿<section class="page">
+  <div class="page-head">
+    <span class="eyebrow">DESCUBRE. ELIGE. JUEGA.</span>
+    <h1>Catálogo de videojuegos</h1>
+    <p>Encuentra tu próxima aventura.</p>
+  </div>
+  <div class="catalog-controls">
+    <label class="search-box"
+      ><app-icon name="search" /><input
+        #search
+        type="search"
+        aria-label="Buscar videojuegos"
+        placeholder="¿A qué quieres jugar? Busca un título…"
+        [value]="query()"
+        (input)="query.set(search.value)"
+      /><span>BUSCAR</span></label
+    >
+    <div class="filter-row" aria-label="Filtrar por categoría">
+      @for (item of categories; track item) {
+        <button
+          class="filter-chip"
+          [class.active]="category() === item"
+          [attr.aria-pressed]="category() === item"
+          (click)="category.set(item)"
+        >
+          {{ item === 'Todas' ? 'Todos' : item }}
+        </button>
+      }
+    </div>
+  </div>
+  <div class="results-line">
+    <span
+      ><b>{{ games().length }}</b> juegos disponibles</span
+    ><span>Encuentra algo que te sorprenda</span>
+  </div>
+  @if (catalog.loading()) {
+    <p role="status">Cargando videojuegos…</p>
+  }
+  @if (catalog.error()) {
+    <p class="error" role="alert">{{ catalog.error() }}</p>
+    <button (click)="catalog.load()">Reintentar</button>
+  }
+  <div class="game-grid">
+    @for (game of games(); track game.id) {
+      <app-game-card [game]="game" />
+    }
+  </div>
+  @if (!catalog.loading() && !catalog.error() && !games().length) {
+    <div class="empty">
+      <app-icon name="search" />
+      <h2>No encontramos juegos</h2>
+      <p>Prueba con otro título o explora las demás categorías.</p>
+      <button (click)="query.set(''); category.set('Todas')" class="ghost">
+        Ver todos los juegos
+      </button>
+    </div>
+  }
+</section>

@@ -1,0 +1,70 @@
+﻿<div class="admin-page-heading">
+  <div>
+    <h1>Dashboard</h1>
+    <p>Resumen de la actividad registrada en PostgreSQL.</p>
+  </div>
+  <button class="ghost" (click)="load()" [disabled]="loading()">Actualizar</button>
+</div>
+@if (loading()) {
+  <p role="status">Consultando funciones del dashboard…</p>
+}
+@if (error()) {
+  <p class="error" role="alert">{{ error() }}</p>
+}
+@if (data(); as d) {
+  @if (d.resumen.error) {
+    <p class="error" role="alert">{{ d.resumen.error }}</p>
+  }
+  <div class="kpi-grid">
+    <article class="panel">
+      <span>Ventas totales</span
+      ><strong>{{ summary ? (summary.ventas_totales | currency: 'USD') : 'No disponible' }}</strong>
+    </article>
+    <article class="panel">
+      <span>Total de órdenes</span
+      ><strong>{{ summary ? (summary.total_ordenes | number) : 'No disponible' }}</strong>
+    </article>
+    <article class="panel">
+      <span>Usuarios activos</span
+      ><strong>{{
+        d.usuariosActivos.data === null ? 'No disponible' : (d.usuariosActivos.data | number)
+      }}</strong>
+      @if (d.usuariosActivos.error) {
+        <p class="error">{{ d.usuariosActivos.error }}</p>
+      }
+    </article>
+    <article class="panel">
+      <span>Videojuegos activos</span
+      ><strong>{{
+        d.juegosActivos.data === null ? 'No disponible' : (d.juegosActivos.data | number)
+      }}</strong>
+      @if (d.juegosActivos.error) {
+        <p class="error">{{ d.juegosActivos.error }}</p>
+      }
+    </article>
+    <article class="panel">
+      <span>Pagos pendientes</span
+      ><strong>{{ summary ? (summary.pagos_pendientes | number) : 'No disponible' }}</strong>
+    </article>
+    <article class="panel">
+      <span>Juegos vendidos</span
+      ><strong>{{ summary ? (summary.juegos_vendidos | number) : 'No disponible' }}</strong>
+    </article>
+  </div>
+  <div class="admin-charts">
+    <app-admin-chart
+      title="Ventas por mes"
+      [data]="meses"
+      [error]="d.meses.error"
+      [money]="true"
+    /><app-admin-chart
+      title="Videojuegos más vendidos"
+      [data]="juegos"
+      [error]="d.juegos.error"
+    /><app-admin-chart
+      title="Métodos de pago"
+      [data]="metodos"
+      [error]="d.metodos.error"
+    /><app-admin-chart title="Estados de órdenes" [data]="estados" [error]="d.estados.error" />
+  </div>
+}

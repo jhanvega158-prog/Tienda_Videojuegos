@@ -1,5 +1,11 @@
 # FrontBd2
 
+La integración PayPal Sandbox está en `backend/` y reutiliza el frontend Angular.
+Consulta [la guía de configuración para Windows y el informe de entrega](docs/paypal-sandbox.md)
+y [los resultados de validación](docs/paypal-validation.md).
+Requiere configurar variables locales y revisar/aplicar manualmente `paypal-migration.sql` en Supabase.
+No se ha activado PayPal LIVE.
+
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.1.2.
 
 ## Development server

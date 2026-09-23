@@ -1,0 +1,67 @@
+﻿<section class="page">
+  <div class="page-head">
+    <span class="eyebrow">CADA COMPRA, UNA NUEVA HISTORIA</span>
+    <h1>Mis compras</h1>
+    <p>Consulta tus pedidos y todos sus detalles.</p>
+  </div>
+  @if (purchases.loading()) {
+    <p role="status">Cargando compras...</p>
+  }
+  @if (purchases.error()) {
+    <p role="alert">{{ purchases.error() }}</p>
+    <button (click)="purchases.load()">Reintentar</button>
+  }
+  @if (purchases.purchases().length) {
+    <div class="purchase-list">
+      @for (p of purchases.purchases(); track p.id) {
+        <article class="purchase-card">
+          <div class="purchase-top">
+            <div class="order-id">
+              <app-icon name="bag" />
+              <div>
+                <span>NÚMERO DE ORDEN</span>
+                <h2>{{ p.id }}</h2>
+              </div>
+            </div>
+            <span class="status" [attr.data-status]="p.estadoPago">{{
+              p.estadoPago === 'PAGADO'
+                ? 'PAGADA'
+                : p.estadoPago === 'RECHAZADO'
+                  ? 'RECHAZADA'
+                  : p.estadoPago
+            }}</span>
+          </div>
+          <div class="purchase-bottom">
+            <div class="purchase-thumbs">
+              @for (item of p.productos; track item.game.id) {
+                <img [src]="item.game.imagen" [alt]="item.game.titulo" loading="lazy" />
+              }
+            </div>
+            <div class="order-meta">
+              <span>Fecha</span><b>{{ p.fecha | date: 'dd MMM yyyy' }}</b>
+            </div>
+            <div class="order-meta">
+              <span>Productos</span><b>{{ p.productos.length }}</b>
+            </div>
+            <div class="order-meta">
+              <span>{{ p.metodoPago }} · Total</span
+              ><strong>{{ p.total | currency: 'USD' }}</strong>
+            </div>
+            <a [routerLink]="['/compra', p.id]" class="button ghost"
+              >Ver detalle <app-icon name="arrow"
+            /></a>
+          </div>
+        </article>
+      }
+    </div>
+  } @else {
+    <div class="empty">
+      <app-icon name="bag" />
+      <h2>Tu primera aventura está esperando</h2>
+      <p>
+        Aún no tienes compras. Cuando completes un pedido, podrás encontrar todos sus detalles aquí.
+      </p>
+      <a routerLink="/catalogo" class="button">Explorar catálogo <app-icon name="arrow" /></a>
+    </div>
+  }
+</section>

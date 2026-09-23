@@ -1,0 +1,90 @@
+﻿<div class="admin-page-heading">
+  <div>
+    <h1>Categorías</h1>
+    <p>Organiza las categorías reales de la tienda.</p>
+  </div>
+  <button (click)="open()">Crear categoría</button>
+</div>
+@if (error()) {
+  <p class="error" role="alert">{{ error() }}</p>
+}
+@if (success()) {
+  <p class="notice" role="status">{{ success() }}</p>
+}
+@if (editor()) {
+  <form class="panel admin-form" [formGroup]="form" (ngSubmit)="save()">
+    <h2>{{ editing() ? 'Editar categoría' : 'Nueva categoría' }}</h2>
+    <div class="fields">
+      <label>Nombre<input formControlName="nombre" /></label
+      ><label class="check-label"><input type="checkbox" formControlName="activo" />Activa</label
+      ><label class="field-wide"
+        >Descripción<textarea formControlName="descripcion" rows="3"></textarea>
+      </label>
+    </div>
+    @if (form.touched && form.invalid) {
+      <p class="error">El nombre es obligatorio.</p>
+    }
+    <div class="form-actions">
+      <button type="button" class="ghost" (click)="editor.set(false)" [disabled]="saving()">
+        Cancelar</button
+      ><button type="submit" [disabled]="saving()">
+        {{ saving() ? 'Guardando…' : 'Guardar categoría' }}
+      </button>
+    </div>
+  </form>
+}
+<div class="admin-filters">
+  <label>Buscar categoría<input #q type="search" (input)="search.set(q.value)" /></label
+  ><button class="ghost" (click)="load()" [disabled]="loading()">Actualizar</button>
+</div>
+@if (loading()) {
+  <p role="status">Cargando categorías…</p>
+} @else {
+  <div class="admin-table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Estado</th>
+          <th>Creación</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (c of filtered(); track c.id) {
+          <tr>
+            <td>{{ c.id }}</td>
+            <td>{{ c.nombre }}</td>
+            <td>{{ c.descripcion || '—' }}</td>
+            <td>
+              <span class="badge">{{ c.activo ? 'Activa' : 'Inactiva' }}</span>
+            </td>
+            <td>{{ c.fecha_creacion | date: 'dd/MM/yyyy' }}</td>
+            <td>
+              <div class="table-actions">
+                <button class="ghost" (click)="open(c)">Editar</button
+                ><button class="ghost" (click)="toggle(c)" [disabled]="saving()">
+                  {{ c.activo ? 'Desactivar' : 'Activar' }}
+                </button>
+              </div>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="6">No hay categorías con este filtro.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}
+@if (confirmation(); as action) {
+  <app-admin-confirm
+    [message]="action.message"
+    [busy]="saving()"
+    (accepted)="action.run()"
+    (cancelled)="confirmation.set(null)"
+  />
+}

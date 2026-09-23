@@ -1,0 +1,69 @@
+﻿.payment-card {
+  max-width: 660px;
+  margin: auto;
+  padding: 40px;
+}
+.payment-card h2 {
+  font-size: 28px;
+}
+.payment-card > p,
+.payment-card form > p {
+  font-size: 16px;
+}
+.payment-card form {
+  display: grid;
+  gap: 18px;
+}
+.payment-card form h2,
+.payment-card form p {
+  margin: 0;
+}
+.payment-card label {
+  display: block;
+}
+.payment-icon {
+  width: 42px;
+  height: 42px;
+  color: #78adf6;
+  margin-bottom: 22px;
+}
+.payment-card > .badge {
+  margin-bottom: 20px;
+}
+.payment-card > p {
+  margin-top: 20px;
+}
+.pay-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  border-top: 1px solid var(--border);
+  margin-top: 30px;
+  padding-top: 24px;
+}
+.pay-total span {
+  color: var(--muted);
+  font-size: 15px;
+}
+.pay-total b {
+  font-size: 28px;
+}
+.pay-button {
+  width: 100%;
+  margin-top: 26px;
+}
+.payment-card > .text-link {
+  display: flex;
+  justify-content: center;
+  margin-top: 22px;
+  font-size: 13px;
+}
+@media (max-width: 600px) {
+  .payment-card {
+    padding: 24px;
+  }
+  .pay-total b {
+    font-size: 24px;
+  }
+}

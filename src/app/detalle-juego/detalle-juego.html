@@ -1,0 +1,113 @@
+﻿@if (game(); as game) {
+  <section class="page detail">
+    <div class="breadcrumbs">
+      <a routerLink="/">Inicio</a><span>/</span><a routerLink="/catalogo">Catálogo</a><span>/</span
+      ><span>{{ game.titulo }}</span>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-visual">
+        <div class="detail-cover parallax-media" appParallax [parallaxRange]="16">
+          <img appGameImage [src]="game.imagen" [alt]="game.titulo" />
+        </div>
+        <div class="image-caption">
+          <app-icon name="game" />{{ game.plataforma }}
+          @if (game.desarrollador) {
+            <span>{{ game.desarrollador }}</span>
+          }
+        </div>
+      </div>
+      <div class="detail-copy">
+        <span class="tag">{{ game.categoria }}</span>
+        <h1>{{ game.titulo }}</h1>
+        <p>{{ game.descripcion }}</p>
+        <div class="detail-info">
+          <span
+            >Plataforma <b>{{ game.plataforma }}</b></span
+          ><span
+            >Disponibilidad <b>{{ game.stock }} unidades</b></span
+          >
+        </div>
+        <div class="detail-price">
+          <strong>{{ game.precio | currency: 'USD' }}</strong
+          ><span>USD · IVA calculado en el carrito</span>
+        </div>
+        @if (auth.isAuthenticated()) {
+          <button class="add-button" (click)="add()" [disabled]="!game.stock">
+            <app-icon name="cart" />Agregar al carrito</button
+          ><button
+            class="ghost favorite-detail"
+            (click)="favorites.toggle(game.id)"
+            [attr.aria-pressed]="favorites.has(game.id)"
+          >
+            <app-icon name="heart" />{{
+              favorites.has(game.id) ? 'Quitar de favoritos' : 'Agregar a favoritos'
+            }}
+          </button>
+        } @else {
+          <a
+            class="button add-button"
+            routerLink="/login"
+            [queryParams]="{ returnUrl: '/juego/' + game.id }"
+            >Iniciar sesión para comprar</a
+          >
+        }
+        @if (game.trailer_url) {
+          <a
+            class="button ghost"
+            [href]="game.trailer_url"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Ver tráiler</a
+          >
+        }
+        <p class="feedback" aria-live="polite">{{ feedback() }}</p>
+      </div>
+    </div>
+    <div class="detail-bottom">
+      <article class="panel">
+        <span class="eyebrow">DESCUBRE LA EXPERIENCIA</span>
+        <h2>Acerca del juego</h2>
+        <p>{{ game.descripcion }}</p>
+        <p>
+          Explora el catálogo y encuentra más títulos de {{ game.categoria.toLowerCase() }} para tu
+          próxima partida.
+        </p>
+        <a routerLink="/catalogo" [queryParams]="{ categoria: game.categoria }" class="text-link"
+          >Más de esta categoría <app-icon name="arrow"
+        /></a>
+      </article>
+      <article class="panel">
+        <h3>Información del juego</h3>
+        <dl>
+          <div>
+            <dt>Categoría</dt>
+            <dd>{{ game.categoria }}</dd>
+          </div>
+          <div>
+            <dt>Plataforma</dt>
+            <dd>{{ game.plataforma }}</dd>
+          </div>
+          <div>
+            <dt>Desarrollador</dt>
+            <dd>{{ game.desarrollador || 'No especificado' }}</dd>
+          </div>
+        </dl>
+      </article>
+    </div>
+  </section>
+} @else {
+  <section class="page">
+    <div class="empty">
+      <app-icon name="search" />
+      @if (catalog.loading()) {
+        <h1>Cargando videojuego…</h1>
+      } @else if (catalog.error()) {
+        <p class="error" role="alert">{{ catalog.error() }}</p>
+        <button (click)="catalog.load()">Reintentar</button>
+      } @else {
+        <h1>Juego no encontrado</h1>
+      }
+      <a routerLink="/catalogo" class="button">Volver al catálogo</a>
+    </div>
+  </section>
+}

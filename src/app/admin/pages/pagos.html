@@ -1,0 +1,155 @@
+﻿<div class="admin-page-heading">
+  <div>
+    <h1>Pagos</h1>
+    <p>Consulta de pagos registrados y transacciones PayPal.</p>
+  </div>
+  <button class="ghost" (click)="load()" [disabled]="loading()">Actualizar</button>
+</div>
+@if (error()) {
+  <p class="error" role="alert">{{ error() }}</p>
+}
+<div class="admin-filters">
+  <label
+    >Buscar<input
+      #q
+      type="search"
+      placeholder="Referencia, orden o proveedor"
+      (input)="search.set(q.value)" /></label
+  ><label
+    >Estado<select #s (change)="state.set(s.value)">
+      <option value="todos">Todos</option>
+      @for (
+        state of [
+          'PENDIENTE',
+          'PROCESANDO',
+          'PAGADO',
+          'RECHAZADO',
+          'CANCELADO',
+          'REEMBOLSADO',
+          'ERROR',
+        ];
+        track state
+      ) {
+        <option>{{ state }}</option>
+      }
+    </select></label
+  >
+</div>
+@if (loading()) {
+  <p role="status">Cargando pagos…</p>
+} @else {
+  <div class="admin-table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Referencia</th>
+          <th>Orden</th>
+          <th>Cliente</th>
+          <th>PayPal Order ID</th>
+          <th>PayPal Capture ID</th>
+          <th>Proveedor</th>
+          <th>Método</th>
+          <th>Monto</th>
+          <th>Estado</th>
+          <th>Fecha</th>
+          <th>Confirmación</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (p of filtered(); track p.id) {
+          <tr>
+            <td>{{ p.referencia || '—' }}</td>
+            <td>{{ p.ordenes?.numero_orden || p.id_orden }}</td>
+            <td>{{ p.ordenes?.usuarios?.nombre }} {{ p.ordenes?.usuarios?.apellido }}</td>
+            <td>{{ p.paypal_order_id || '—' }}</td>
+            <td>{{ p.paypal_capture_id || '—' }}</td>
+            <td>{{ p.proveedor || '—' }}</td>
+            <td>{{ p.metodo_pago || '—' }}</td>
+            <td>{{ p.monto | currency: 'USD' }}</td>
+            <td>
+              <span class="badge">{{ p.estado }}</span>
+            </td>
+            <td>{{ p.fecha_creacion | date: 'dd/MM/yyyy HH:mm' }}</td>
+            <td>
+              {{ p.fecha_confirmacion ? (p.fecha_confirmacion | date: 'dd/MM/yyyy HH:mm') : '—' }}
+            </td>
+            <td><button class="ghost" (click)="open(p)">Ver detalle</button></td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="12">No hay pagos para estos filtros.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}
+@if (selected(); as p) {
+  <section class="panel admin-detail">
+    <div class="admin-page-heading">
+      <h2>Pago {{ p.referencia || p.id }}</h2>
+      <button class="ghost" (click)="selected.set(null)">Cerrar detalle</button>
+    </div>
+    <p>
+      {{ p.proveedor || '—' }} · {{ p.metodo_pago || '—' }} · {{ p.monto | currency: 'USD' }} ·
+      {{ p.estado }}
+    </p>
+    <dl class="admin-data">
+      @if (p.paypal_order_id) {
+        <dt>PayPal Order ID</dt>
+        <dd>{{ p.paypal_order_id }}</dd>
+      }
+      @if (p.paypal_capture_id) {
+        <dt>PayPal Capture ID</dt>
+        <dd>{{ p.paypal_capture_id }}</dd>
+      }
+      @if (p.payphone_transaction_id) {
+        <dt>Transacción PayPhone</dt>
+        <dd>{{ p.payphone_transaction_id }}</dd>
+      }
+      @if (p.client_transaction_id) {
+        <dt>Transacción del cliente</dt>
+        <dd>{{ p.client_transaction_id }}</dd>
+      }
+      @if (p.codigo_autorizacion) {
+        <dt>Código de autorización</dt>
+        <dd>{{ p.codigo_autorizacion }}</dd>
+      }
+    </dl>
+    <h3>Auditoría del pago</h3>
+    @if (detailLoading()) {
+      <p role="status">Cargando auditoría…</p>
+    } @else if (detailError()) {
+      <p class="error" role="alert">{{ detailError() }}</p>
+      <button (click)="open(p)">Reintentar</button>
+    } @else {
+      <div class="admin-table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Estado anterior</th>
+              <th>Estado nuevo</th>
+              <th>Descripción</th>
+              <th>Fecha</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (a of audit(); track a.id) {
+              <tr>
+                <td>{{ a.estado_anterior || '—' }}</td>
+                <td>{{ a.estado_nuevo }}</td>
+                <td>{{ a.descripcion || '—' }}</td>
+                <td>{{ a.fecha | date: 'dd/MM/yyyy HH:mm:ss' }}</td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="4">No hay eventos de auditoría registrados.</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </section>
+}

@@ -1,0 +1,78 @@
+﻿<a class="skip-link" href="#main-content">Saltar al contenido</a>
+<header class="navbar" appScrollSurface>
+  <nav class="container nav-container" aria-label="Navegación principal">
+    <a class="brand" routerLink="/" (click)="menuOpen.set(false)"
+      ><span class="brand-icon"><app-icon name="game" /></span><span>JJC <b>GAMING</b></span></a
+    >
+    <div id="main-menu" class="navigation" [class.open]="menuOpen()">
+      <div class="nav-menu">
+        <a
+          routerLink="/"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          (click)="menuOpen.set(false)"
+          >Inicio</a
+        ><a routerLink="/catalogo" routerLinkActive="active" (click)="menuOpen.set(false)"
+          >Catálogo</a
+        ><a routerLink="/nosotros" routerLinkActive="active" (click)="menuOpen.set(false)"
+          >Nosotros</a
+        >
+      </div>
+      <div class="nav-account">
+        @if (auth.isAuthenticated()) {
+          <details class="account-menu" [open]="menuOpen()">
+            <summary>
+              <app-icon name="user" /><span>{{ auth.profile()?.nombre }}</span
+              ><span class="chevron">⌄</span>
+            </summary>
+            <div class="account-dropdown">
+              <span class="account-label">TU CUENTA</span
+              ><a routerLink="/compras" (click)="menuOpen.set(false)"
+                ><app-icon name="bag" />Mis compras</a
+              ><a routerLink="/biblioteca" (click)="menuOpen.set(false)"
+                ><app-icon name="library" />Mi biblioteca</a
+              >
+              @if (auth.isAdmin()) {
+                <a routerLink="/admin" (click)="menuOpen.set(false)"
+                  ><app-icon name="grid" />Panel Admin</a
+                >
+              }
+              <button (click)="logout()" [disabled]="signingOut()">
+                <app-icon name="logout" />{{ signingOut() ? 'Cerrando…' : 'Cerrar sesión' }}
+              </button>
+            </div>
+          </details>
+        } @else {
+          <a routerLink="/login" class="login-link" (click)="menuOpen.set(false)">Iniciar sesión</a
+          ><a routerLink="/registro" class="button register-link" (click)="menuOpen.set(false)"
+            >Registrarse <app-icon name="arrow"
+          /></a>
+        }
+      </div>
+    </div>
+    <div class="nav-tools">
+      <a routerLink="/catalogo" aria-label="Buscar juegos" title="Buscar juegos"
+        ><app-icon name="search"
+      /></a>
+      @if (auth.isAuthenticated()) {
+        <a routerLink="/favoritos" aria-label="Favoritos" title="Favoritos"
+          ><app-icon name="heart" /></a
+        ><a routerLink="/carrito" class="cart-link" aria-label="Carrito"
+          ><app-icon name="cart" /><span class="cart-count">{{ cart.count() }}</span></a
+        >
+      }
+    </div>
+    <button
+      class="menu-button ghost icon-button"
+      (click)="menuOpen.set(!menuOpen())"
+      [attr.aria-expanded]="menuOpen()"
+      aria-controls="main-menu"
+      [attr.aria-label]="menuOpen() ? 'Cerrar menú' : 'Abrir menú'"
+    >
+      <app-icon [name]="menuOpen() ? 'close' : 'menu'" />
+    </button>
+  </nav>
+</header>
+@if (auth.error() && auth.isAuthenticated()) {
+  <p class="error" role="alert">{{ auth.error() }}</p>
+}

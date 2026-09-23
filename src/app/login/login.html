@@ -1,0 +1,60 @@
+﻿<section class="auth-page container">
+  <div class="auth-layout">
+    <aside class="auth-art" appParallax>
+      <a class="auth-brand" routerLink="/"><app-icon name="game" />JJC GAMING</a>
+      <div>
+        <span class="eyebrow">TU SIGUIENTE HISTORIA TE ESPERA</span>
+        <h2>Vuelve al juego.<br />Vuelve a tu mundo.</h2>
+        <p>Grandes aventuras empiezan con una pequeña decisión. La tuya empieza aquí.</p>
+        <span class="art-caption">RED DEAD REDEMPTION 2</span>
+      </div>
+    </aside>
+    <div class="auth-form-panel">
+      <form class="login-card" [formGroup]="form" (ngSubmit)="login()">
+        <span class="eyebrow">QUÉ BUENO VERTE</span>
+        <h1>Bienvenido<br />de nuevo</h1>
+        <p>Inicia sesión para continuar tu aventura.</p>
+        <label
+          >Correo electrónico<input
+            type="email"
+            formControlName="correo"
+            autocomplete="email"
+            placeholder="tu@correo.com" /></label
+        ><label
+          >Contraseña
+          <div class="password-field">
+            <input
+              [type]="showPassword() ? 'text' : 'password'"
+              formControlName="password"
+              autocomplete="current-password"
+              placeholder="Tu contraseña"
+            /><button
+              type="button"
+              class="password-toggle"
+              (click)="showPassword.set(!showPassword())"
+              [attr.aria-pressed]="showPassword()"
+              [attr.aria-label]="showPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+            >
+              <app-icon name="eye" />
+            </button></div
+        ></label>
+        @if (form.touched && form.invalid) {
+          <p class="error" role="alert">Ingresa un correo válido y contraseña.</p>
+        }
+        @if (auth.error()) {
+          <p class="error" role="alert">{{ auth.error() }}</p>
+        }
+        <button type="submit" class="auth-submit" [disabled]="submitting()">
+          {{ submitting() ? 'Ingresando…' : 'Iniciar sesión' }}<app-icon name="arrow" />
+        </button>
+        <div class="auth-divider"></div>
+        <p class="auth-switch">
+          ¿Todavía no tienes una cuenta? <a routerLink="/registro">Regístrate</a>
+        </p>
+        <span class="auth-secure"
+          ><app-icon name="shield" />Tu cuenta. Tu espacio. Tu próxima aventura.</span
+        >
+      </form>
+    </div>
+  </div>
+</section>

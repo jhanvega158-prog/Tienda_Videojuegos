@@ -1,0 +1,126 @@
+﻿.detail-grid {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+.detail-visual {
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+.detail-cover > img {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+}
+.image-caption {
+  display: flex;
+  gap: 12px;
+  padding: 22px;
+  align-items: center;
+  color: #9eb0cb;
+  font-size: 13px;
+}
+.image-caption > span {
+  margin-left: auto;
+  font-size: 11px;
+}
+.detail-copy h1 {
+  font-size: 44px;
+  margin: 14px 0 22px;
+}
+.detail-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 26px 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+.detail-info b {
+  display: block;
+  margin-top: 5px;
+  color: white;
+  font-size: 15px;
+}
+.detail-price {
+  border-top: 1px solid var(--border);
+  padding-top: 22px;
+  margin-bottom: 24px;
+}
+.detail-price strong {
+  display: block;
+  font-size: 38px;
+  letter-spacing: -1px;
+}
+.detail-price > span {
+  font-size: 12px;
+  color: var(--muted);
+}
+.add-button,
+.favorite-detail {
+  width: 100%;
+  margin-bottom: 12px;
+}
+.feedback {
+  min-height: 24px;
+  color: #7fcead;
+  font-size: 13px;
+  margin: 0;
+}
+.detail-bottom {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 28px;
+  margin-top: 48px;
+}
+.detail-bottom h2 {
+  font-size: 28px;
+}
+.detail-bottom p {
+  font-size: 16px;
+}
+dl {
+  margin: 0;
+}
+dl > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  border-bottom: 1px solid var(--border);
+  padding: 12px 0;
+  font-size: 14px;
+}
+dt {
+  color: var(--muted);
+}
+dd {
+  margin: 0;
+}
+@media (max-width: 950px) {
+  .detail-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .detail-copy h1 {
+    font-size: 38px;
+  }
+  .detail-bottom {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 600px) {
+  .image-caption {
+    flex-wrap: wrap;
+    padding: 18px;
+  }
+  .image-caption > span {
+    margin-left: 0;
+    width: 100%;
+  }
+  .detail-copy h1 {
+    font-size: 34px;
+  }
+}

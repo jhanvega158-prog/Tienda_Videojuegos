@@ -1,0 +1,147 @@
+<div class="admin-page-heading">
+  <div>
+    <h1>Productos</h1>
+    <p>Videojuegos de la tienda, consultados directamente en Supabase.</p>
+  </div>
+  <button (click)="open()">Crear videojuego</button>
+</div>
+@if (error()) {
+  <p class="error" role="alert">{{ error() }}</p>
+}
+@if (success()) {
+  <p class="notice" role="status">{{ success() }}</p>
+}
+@if (editor()) {
+  <form class="panel admin-form" [formGroup]="form" (ngSubmit)="save()">
+    <h2>{{ editing() ? 'Editar videojuego' : 'Nuevo videojuego' }}</h2>
+    <div class="fields">
+      <label>Nombre<input formControlName="nombre" /></label
+      ><label
+        >Categoría<select formControlName="id_categoria">
+          <option [ngValue]="0">Selecciona una categoría</option>
+          @for (c of categories(); track c.id) {
+            <option [ngValue]="c.id">{{ c.nombre }}{{ c.activo ? '' : ' (inactiva)' }}</option>
+          }
+        </select></label
+      >
+      <label>Precio (USD)<input type="number" min="0" step="0.01" formControlName="precio" /></label
+      ><label>Stock<input type="number" min="0" step="1" formControlName="stock" /></label>
+      <label>Plataforma<input formControlName="plataforma" /></label
+      ><label>Desarrollador<input formControlName="desarrollador" /></label
+      ><label>Editor<input formControlName="editor" /></label
+      ><label>Fecha de lanzamiento<input type="date" formControlName="fecha_lanzamiento" /></label>
+      <label class="field-wide"
+        >Descripción<textarea formControlName="descripcion" rows="4"></textarea></label
+      ><label
+        >URL de imagen<input
+          type="text"
+          formControlName="imagen_url"
+          placeholder="https://…" /></label
+      ><label
+        >URL de tráiler<input type="url" formControlName="trailer_url" placeholder="https://…"
+      /></label>
+      <label class="check-label"><input type="checkbox" formControlName="activo" />Activo</label
+      ><label class="check-label"
+        ><input type="checkbox" formControlName="destacado" />Destacado</label
+      >
+    </div>
+    @if (form.controls.imagen_url.valid && form.controls.imagen_url.value) {
+      <img
+        appGameImage
+        class="product-preview"
+        [src]="form.controls.imagen_url.value"
+        alt="Vista previa del videojuego"
+      />
+    }
+    @if (form.touched && form.invalid) {
+      <p class="error" role="alert">
+        Revisa nombre, categoría, precio no negativo, stock entero no negativo y URLs válidas.
+      </p>
+    }
+    <div class="form-actions">
+      <button type="button" class="ghost" (click)="editor.set(false)" [disabled]="saving()">
+        Cancelar</button
+      ><button type="submit" [disabled]="saving()">
+        {{ saving() ? 'Guardando…' : 'Guardar videojuego' }}
+      </button>
+    </div>
+  </form>
+}
+<div class="admin-filters">
+  <label
+    >Buscar<input
+      #q
+      type="search"
+      placeholder="Nombre del juego"
+      (input)="search.set(q.value)" /></label
+  ><label
+    >Estado<select #s (change)="state.set(s.value)">
+      <option value="todos">Todos</option>
+      <option value="activo">Activos</option>
+      <option value="inactivo">Inactivos</option>
+    </select></label
+  ><button class="ghost" (click)="load()" [disabled]="loading()">Actualizar</button>
+</div>
+@if (loading()) {
+  <p role="status">Cargando productos…</p>
+} @else {
+  <div class="admin-table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Videojuego</th>
+          <th>Categoría</th>
+          <th>Precio</th>
+          <th>Stock</th>
+          <th>Plataforma</th>
+          <th>Estado</th>
+          <th>Destacado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (p of filtered(); track p.id) {
+          <tr>
+            <td>{{ p.id }}</td>
+            <td>
+              <div class="table-product">
+                <img appGameImage [src]="p.imagen_url" [alt]="p.nombre" /><strong>{{
+                  p.nombre
+                }}</strong>
+              </div>
+            </td>
+            <td>{{ p.categorias?.nombre || '—' }}</td>
+            <td>{{ p.precio | currency: 'USD' }}</td>
+            <td>{{ p.stock }}</td>
+            <td>{{ p.plataforma || '—' }}</td>
+            <td>
+              <span class="badge">{{ p.activo ? 'Activo' : 'Inactivo' }}</span>
+            </td>
+            <td>{{ p.destacado ? 'Sí' : 'No' }}</td>
+            <td>
+              <div class="table-actions">
+                <button class="ghost" (click)="open(p)">Editar</button
+                ><button class="ghost" (click)="toggle(p)" [disabled]="saving()">
+                  {{ p.activo ? 'Desactivar' : 'Activar' }}
+                </button>
+              </div>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="9">No hay productos con estos filtros.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}
+@if (confirmation(); as action) {
+  <app-admin-confirm
+    [message]="action.message"
+    [busy]="saving()"
+    (accepted)="action.run()"
+    (cancelled)="confirmation.set(null)"
+  />
+}

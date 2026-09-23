@@ -1,0 +1,82 @@
+{
+  "source": "Supabase REST SELECT column LIMIT 0, no rows read",
+  "tables": {
+    "carritos": {
+      "present": [
+        "id",
+        "id_usuario",
+        "fecha_creacion"
+      ],
+      "absent": [
+        "estado"
+      ]
+    },
+    "carrito_detalle": {
+      "present": [
+        "id",
+        "id_carrito",
+        "id_videojuego",
+        "cantidad"
+      ],
+      "absent": [
+        "precio_unitario",
+        "fecha_agregado"
+      ]
+    },
+    "biblioteca": {
+      "present": [
+        "id",
+        "id_usuario",
+        "id_videojuego",
+        "id_orden",
+        "fecha_adquisicion"
+      ],
+      "absent": [
+        "fecha_compra",
+        "cantidad"
+      ]
+    },
+    "pagos": {
+      "present": [
+        "id",
+        "id_orden",
+        "proveedor",
+        "metodo_pago",
+        "estado",
+        "monto",
+        "referencia",
+        "fecha_creacion",
+        "fecha_confirmacion"
+      ],
+      "absent": [
+        "respuesta_proveedor",
+        "paypal_order_id",
+        "paypal_capture_id"
+      ]
+    },
+    "orden_detalle": {
+      "present": [
+        "id",
+        "id_orden",
+        "id_videojuego",
+        "cantidad",
+        "precio_unitario",
+        "subtotal"
+      ],
+      "absent": []
+    },
+    "ordenes": {
+      "present": [
+        "id",
+        "id_usuario",
+        "numero_orden",
+        "fecha",
+        "subtotal",
+        "iva",
+        "total",
+        "estado"
+      ],
+      "absent": []
+    }
+  }
+}

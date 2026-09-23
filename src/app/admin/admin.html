@@ -1,0 +1,38 @@
+﻿<section class="admin-layout container">
+  <aside class="admin-sidebar">
+    <span class="admin-label">JJC / ADMINISTRACIÓN</span
+    ><button
+      class="admin-menu-toggle ghost"
+      (click)="expanded.set(!expanded())"
+      [attr.aria-expanded]="expanded()"
+      aria-controls="admin-navigation"
+    >
+      Secciones del panel <app-icon name="menu" />
+    </button>
+    <div id="admin-navigation" [class.expanded]="expanded()">
+      <nav aria-label="Administración">
+        @for (item of sections; track item.path) {
+          <a
+            [routerLink]="item.path"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            ariaCurrentWhenActive="page"
+            (click)="expanded.set(false)"
+            ><app-icon [name]="item.icon" />{{ item.name }}</a
+          >
+        }
+      </nav>
+      <a routerLink="/catalogo" class="text-link">Volver a la tienda <app-icon name="arrow" /></a
+      ><button class="ghost" (click)="logout()" [disabled]="busy()">Cerrar sesión</button>
+    </div>
+  </aside>
+  <div class="admin-content">
+    <header class="admin-header">
+      <span>JJC GAMING / Administración</span><span class="badge">Acceso ADMIN</span>
+    </header>
+    @if (error()) {
+      <p class="error" role="alert">{{ error() }}</p>
+    }
+    <router-outlet />
+  </div>
+</section>

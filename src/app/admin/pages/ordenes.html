@@ -1,0 +1,132 @@
+﻿<div class="admin-page-heading">
+  <div>
+    <h1>Órdenes</h1>
+    <p>Pedidos y detalles reales de la base de datos.</p>
+  </div>
+</div>
+@if (error()) {
+  <p class="error" role="alert">{{ error() }}</p>
+}
+<div class="admin-filters">
+  <label
+    >Buscar<input
+      #q
+      type="search"
+      placeholder="Número o cliente"
+      (input)="search.set(q.value)" /></label
+  ><label
+    >Estado<select #s (change)="state.set(s.value)">
+      <option value="todos">Todos</option>
+      @for (s of ['PENDIENTE', 'PAGADA', 'CANCELADA', 'RECHAZADA']; track s) {
+        <option>{{ s }}</option>
+      }
+    </select></label
+  ><label>Desde<input #f type="date" (change)="from.set(f.value)" /></label
+  ><label>Hasta<input #t type="date" (change)="to.set(t.value)" /></label
+  ><button (click)="load()" [disabled]="loading()">Filtrar fechas</button>
+</div>
+@if (loading()) {
+  <p role="status">Cargando órdenes…</p>
+} @else {
+  <div class="admin-table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Orden</th>
+          <th>Cliente</th>
+          <th>Fecha</th>
+          <th>Subtotal</th>
+          <th>IVA</th>
+          <th>Total</th>
+          <th>Estado</th>
+          <th>Detalle</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (o of filtered(); track o.id) {
+          <tr>
+            <td>{{ o.numero_orden }}</td>
+            <td>{{ o.usuarios?.nombre }} {{ o.usuarios?.apellido }}</td>
+            <td>{{ o.fecha | date: 'dd/MM/yyyy HH:mm' }}</td>
+            <td>{{ o.subtotal | currency: 'USD' }}</td>
+            <td>{{ o.iva | currency: 'USD' }}</td>
+            <td>{{ o.total | currency: 'USD' }}</td>
+            <td>
+              <span class="badge">{{ o.estado }}</span>
+            </td>
+            <td><button class="ghost" (click)="open(o)">Ver detalle</button></td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="8">No hay órdenes para estos filtros.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}
+@if (selected(); as o) {
+  <section class="panel admin-detail">
+    <div class="admin-page-heading">
+      <h2>Orden {{ o.numero_orden }}</h2>
+      <button class="ghost" (click)="selected.set(null)">Cerrar detalle</button>
+    </div>
+    <p>
+      {{ o.usuarios?.nombre }} {{ o.usuarios?.apellido }} · {{ o.usuarios?.correo }} ·
+      {{ o.usuarios?.telefono }}
+    </p>
+    <span class="badge">{{ o.estado }}</span>
+    @if (detailLoading()) {
+      <p role="status">Cargando detalle…</p>
+    } @else if (detailError()) {
+      <p class="error" role="alert">{{ detailError() }}</p>
+      <button (click)="open(o)">Reintentar</button>
+    } @else {
+      <div class="admin-table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Videojuego</th>
+              <th>Cantidad</th>
+              <th>Precio unitario</th>
+              <th>Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (d of details(); track d.id) {
+              <tr>
+                <td>{{ d.videojuegos?.nombre || 'Videojuego no disponible' }}</td>
+                <td>{{ d.cantidad }}</td>
+                <td>{{ d.precio_unitario | currency: 'USD' }}</td>
+                <td>{{ d.subtotal | currency: 'USD' }}</td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="4">Sin productos asociados.</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      <p class="admin-total">
+        Subtotal: {{ o.subtotal | currency: 'USD' }} · IVA: {{ o.iva | currency: 'USD' }} · Total:
+        <b>{{ o.total | currency: 'USD' }}</b>
+      </p>
+      <h3>Pagos asociados</h3>
+      @for (p of payments(); track p.id) {
+        <p>
+          {{ p.referencia || p.id }} · {{ p.proveedor || '—' }} · {{ p.metodo_pago || '—' }} ·
+          {{ p.monto | currency: 'USD' }} · {{ p.estado }}
+          @if (p.paypal_order_id) {
+            <br />PayPal Order ID: {{ p.paypal_order_id }}
+          }
+          @if (p.paypal_capture_id) {
+            <br />PayPal Capture ID: {{ p.paypal_capture_id }}
+          }
+        </p>
+      } @empty {
+        <p>No hay pagos asociados a esta orden.</p>
+      }
+    }
+  </section>
+}

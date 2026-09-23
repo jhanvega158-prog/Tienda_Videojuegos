@@ -1,0 +1,236 @@
+﻿.auth-page {
+  padding-top: 56px;
+  padding-bottom: 72px;
+}
+.auth-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  max-width: 1180px;
+  margin: auto;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+  min-height: 650px;
+  box-shadow: var(--shadow);
+}
+.auth-art {
+  padding: 42px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 120px;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.auth-art::before {
+  content: '';
+  position: absolute;
+  inset: -64px 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(0deg, #081122fa 5%, #09172b80 65%, #08112270),
+    url('/images/hero-rdr2.jpg') 65% center/cover;
+  transform: translate3d(0, var(--parallax-y, 0px), 0);
+}
+.auth-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+.auth-brand app-icon {
+  color: #72b7ff;
+  width: 32px;
+  height: 32px;
+}
+.auth-art h2 {
+  font-size: 40px;
+  line-height: 1.15;
+  letter-spacing: -1.5px;
+}
+.auth-art p {
+  color: #b0c0d8;
+  font-size: 16px;
+  line-height: 1.8;
+  max-width: 350px;
+}
+.auth-art .eyebrow {
+  font-size: 9px;
+  letter-spacing: 1.5px;
+}
+.art-caption {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: #7990b0;
+  display: block;
+  border-top: 1px solid #ffffff18;
+  padding-top: 22px;
+  margin-top: 32px;
+}
+.auth-form-panel {
+  background: var(--surface);
+  padding: 48px;
+  display: flex;
+  align-items: center;
+}
+.login-card {
+  width: 100%;
+  display: grid;
+  gap: 20px;
+}
+.login-card .eyebrow {
+  font-size: 10px;
+  margin: 0;
+  letter-spacing: 1.4px;
+}
+.login-card h1 {
+  font-size: 42px;
+  line-height: 1.12;
+  margin: 0;
+}
+.login-card > p {
+  font-size: 15px;
+  margin: 0 0 8px;
+}
+.login-card label {
+  display: block;
+}
+.password-field {
+  position: relative;
+}
+.password-field input {
+  padding-right: 52px;
+}
+.password-toggle {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  background: none;
+  color: #8fa3c1;
+  padding: 10px;
+  min-height: 42px;
+  border-radius: 6px;
+}
+.password-toggle:hover {
+  background: #ffffff08;
+  transform: none;
+}
+.auth-submit {
+  width: 100%;
+  margin-top: 6px;
+  min-height: 50px;
+}
+.auth-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 2px 0;
+}
+.auth-switch {
+  text-align: center;
+  font-size: 13px !important;
+  color: #96a7c0;
+}
+.auth-switch a {
+  color: #79b2ff;
+  font-weight: 600;
+  margin-left: 4px;
+}
+.auth-secure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #667c9c;
+  font-size: 11px;
+}
+.registration .login-card {
+  gap: 16px;
+}
+.registration .auth-form-panel {
+  padding: 40px 48px;
+}
+.registration .login-card h1 {
+  font-size: 36px;
+}
+.registration .fields {
+  gap: 16px;
+}
+.optional {
+  color: #667b99;
+  font-size: 11px;
+  font-weight: 400;
+}
+@media (max-width: 950px) {
+  .auth-form-panel,
+  .registration .auth-form-panel {
+    padding: 32px;
+  }
+  .auth-art {
+    padding: 30px;
+  }
+  .auth-art h2 {
+    font-size: 34px;
+  }
+  .auth-art .eyebrow {
+    font-size: 8px;
+  }
+  .login-card h1 {
+    font-size: 36px;
+  }
+}
+@media (max-width: 720px) {
+  .auth-layout {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    max-width: 520px;
+  }
+  .auth-art {
+    min-height: 220px;
+    padding: 28px;
+    gap: 28px;
+    background-position: 65% 40%;
+  }
+  .auth-art h2 {
+    font-size: 28px;
+    margin-bottom: 0;
+  }
+  .auth-art p,
+  .art-caption,
+  .auth-art .eyebrow {
+    display: none;
+  }
+  .auth-brand {
+    font-size: 15px;
+  }
+  .auth-page {
+    padding-top: 28px;
+    padding-bottom: 40px;
+  }
+  .auth-form-panel,
+  .registration .auth-form-panel {
+    padding: 28px 24px;
+  }
+  .login-card h1 {
+    font-size: 34px;
+  }
+  .auth-secure {
+    font-size: 10px;
+  }
+  .registration .fields {
+    grid-template-columns: 1fr 1fr;
+  }
+  .login-card > p {
+    font-size: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-art::before {
+    transform: none;
+    inset: 0;
+  }
+}

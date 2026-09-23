@@ -1,0 +1,51 @@
+﻿<footer class="site-footer parallax-glow" appParallax id="ayuda">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a routerLink="/" class="brand"
+          ><app-icon name="game" /><span>JJC <b>GAMING</b></span></a
+        >
+        <p>Grandes juegos. Nuevas historias.<br />Tu próxima aventura empieza aquí.</p>
+        <span class="footer-caption">HECHO PARA QUIENES AMAN JUGAR</span>
+      </div>
+      <div>
+        <h3>Tienda</h3>
+        <a routerLink="/">Inicio</a><a routerLink="/catalogo">Catálogo</a
+        ><a routerLink="/" fragment="ofertas">Ofertas</a><a routerLink="/nosotros">Nosotros</a>
+      </div>
+      <div>
+        <h3>Ayuda</h3>
+        @for (item of ['Contacto', 'Preguntas frecuentes', 'Soporte']; track item) {
+          <button class="footer-link" (click)="topic.set(item); info.showModal()">
+            {{ item }}
+          </button>
+        }
+      </div>
+      <div>
+        <h3>Legal</h3>
+        @for (item of ['Privacidad', 'Términos']; track item) {
+          <button class="footer-link" (click)="topic.set(item); info.showModal()">
+            {{ item }}
+          </button>
+        }
+        <span class="academic-note">Una experiencia académica.<br />Una pasión muy real.</span>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 JJC Gaming. Todos los derechos reservados.</span
+      ><span>Proyecto académico <b>ITSQMET</b></span
+      ><a routerLink="/catalogo">El siguiente nivel empieza aquí <app-icon name="arrow" /></a>
+    </div>
+  </div>
+</footer>
+<dialog #info class="help-dialog" aria-labelledby="help-title">
+  <div class="dialog-heading">
+    <span class="eyebrow">JJC GAMING</span
+    ><button class="ghost icon-button" (click)="info.close()" aria-label="Cerrar información">
+      <app-icon name="close" />
+    </button>
+  </div>
+  <h2 id="help-title">{{ topic() }}</h2>
+  <p>{{ help[topic()] }}</p>
+  <button (click)="info.close()">Entendido</button>
+</dialog>

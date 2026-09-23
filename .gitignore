@@ -42,3 +42,10 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Payment backend: local credentials and build output
+.env
+.env.*
+!.env.example
+backend/target/
+backend/.local/

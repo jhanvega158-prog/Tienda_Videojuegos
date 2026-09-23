@@ -1,0 +1,232 @@
+﻿<div class="about-page">
+  <section class="about-hero" appParallax>
+    <img
+      class="about-hero-image"
+      src="https://images.pexels.com/photos/3165335/pexels-photo-3165335.jpeg"
+      alt="Tecnología y videojuegos"
+    />
+    <div class="about-hero-overlay"></div>
+    <div class="about-hero-content">
+      <span class="about-label"> EMPRESA DE TECNOLOGÍA JJC </span>
+      <h1>
+        Una experiencia creada
+        <span>para gamers</span>
+      </h1>
+      <p>
+        Proyecto académico que simula una plataforma moderna de distribución de videojuegos,
+        combinando diseño, tecnología y una experiencia de navegación intuitiva.
+      </p>
+      <div class="hero-buttons">
+        <a class="about-btn about-btn-primary" routerLink="/catalogo"> Explorar juegos </a>
+        <a class="about-btn about-btn-secondary" href="#ayuda"> Contáctanos </a>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <span>Descubre el proyecto</span>
+      <span class="scroll-arrow">↓</span>
+    </div>
+  </section>
+
+  <section class="about-section about-introduction">
+    <div class="about-content-grid">
+      <div class="about-text">
+        <span class="section-tag"> SOBRE NOSOTROS </span>
+        <h2>
+          Diseñada para la
+          <span>experiencia gamer</span>
+        </h2>
+        <p>
+          Esta plataforma fue desarrollada como una simulación de una tienda digital de videojuegos,
+          inspirada en plataformas reconocidas de la industria.
+        </p>
+        <p>
+          El proyecto busca combinar una interfaz moderna, navegación intuitiva y una estética
+          relacionada con el mundo gaming.
+        </p>
+
+        <div class="feature-list">
+          <div class="feature-item">
+            <span class="feature-icon">✓</span>
+            <div>
+              <strong>Interfaz moderna</strong>
+              <p>Diseño inspirado en plataformas digitales actuales.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">✓</span>
+            <div>
+              <strong>Diseño responsive</strong>
+              <p>Adaptado para diferentes tamaños de pantalla.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">✓</span>
+            <div>
+              <strong>Organización intuitiva</strong>
+              <p>Juegos organizados para facilitar la navegación.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">✓</span>
+            <div>
+              <strong>Experiencia gamer</strong>
+              <p>Estética y contenido orientados al mundo de los videojuegos.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-image-container parallax-media" appParallax [parallaxRange]="20">
+        <div class="image-glow"></div>
+        <img
+          src="https://i.pinimg.com/736x/d9/c9/08/d9c9085bd8eebd283d7dbf633a6f0b9f.jpg"
+          alt="Experiencia gamer"
+        />
+        <div class="image-badge">
+          <strong>JJC</strong>
+          <span>Gaming Platform</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="about-stats parallax-glow" appParallax>
+    <div class="stats-container">
+      <div class="stat-item">
+        <strong>Explora</strong>
+        <span>Nuevas historias</span>
+      </div>
+      <div class="stat-item">
+        <strong>Descubre</strong>
+        <span>Tu próximo juego</span>
+      </div>
+      <div class="stat-item">
+        <strong>Conecta</strong>
+        <span>Con tu mundo</span>
+      </div>
+      <div class="stat-item">
+        <strong>100%</strong>
+        <span>Académico</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="about-section">
+    <div class="section-heading">
+      <span class="section-tag"> NUESTROS PRINCIPIOS </span>
+      <h2>
+        Lo que representa
+        <span>JJC</span>
+      </h2>
+      <p>Tres pilares que representan la idea y propósito detrás del proyecto.</p>
+    </div>
+
+    <div class="principles-grid">
+      <article class="principle-card">
+        <div class="principle-icon"><app-icon name="game" /></div>
+        <span class="principle-number">01</span>
+        <h3>Misión</h3>
+        <p>
+          Crear una plataforma atractiva que simule una experiencia real de compra y navegación
+          gamer, aplicando conocimientos de desarrollo web.
+        </p>
+      </article>
+
+      <article class="principle-card">
+        <div class="principle-icon"><app-icon name="compass" /></div>
+        <span class="principle-number">02</span>
+        <h3>Visión</h3>
+        <p>
+          Desarrollar un proyecto académico completo que combine diseño, tecnología y
+          funcionalidades inspiradas en plataformas digitales reales.
+        </p>
+      </article>
+
+      <article class="principle-card">
+        <div class="principle-icon"><app-icon name="heart" /></div>
+        <span class="principle-number">03 </span>
+        <h3>Valores</h3>
+        <p>
+          Innovación, creatividad, pasión por los videojuegos, aprendizaje continuo y
+          profesionalismo.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <section class="team-section">
+    <div class="about-section">
+      <div class="section-heading team-heading">
+        <span class="section-tag">DETRÁS DEL PROYECTO</span>
+        <h2>
+          Nuestro
+          <span>equipo</span>
+        </h2>
+        <p>Las personas responsables de transformar la idea en una experiencia digital.</p>
+      </div>
+      <div class="team-grid">
+        <!-- Yo -->
+        <article class="team-card">
+          <div class="team-image" appParallax [parallaxSpeed]="-0.06" [parallaxRange]="12">
+            <img
+              src="https://i.pinimg.com/1200x/ae/ac/c9/aeacc9744c4ab508ef93e0329e8870f0.jpg"
+              alt="Carlos Gualsaqui"
+            />
+          </div>
+          <div class="team-info">
+            <span class="team-position"> CEO </span>
+            <h3>Carlos Gualsaqui</h3>
+            <p class="team-role">Director Ejecutivo</p>
+            <p>Lidera la visión, el diseño y la planificación general del proyecto.</p>
+          </div>
+        </article>
+
+        <!-- JHAN -->
+
+        <article class="team-card">
+          <div class="team-image" appParallax [parallaxSpeed]="-0.06" [parallaxRange]="12">
+            <img
+              src="https://i.pinimg.com/1200x/1e/ad/18/1ead1844b21db36ec1a91a8d9b19e59e.jpg"
+              alt="Jhan Vega"
+            />
+          </div>
+          <div class="team-info">
+            <span class="team-position"> GERENTE </span>
+            <h3>Jhan Vega</h3>
+            <p class="team-role">Gestión del Proyecto</p>
+            <p>Responsable de mantener el proyecto funcionando... y de dormir xd.</p>
+          </div>
+        </article>
+
+        <!-- JORGE -->
+
+        <article class="team-card">
+          <div class="team-image" appParallax [parallaxSpeed]="-0.06" [parallaxRange]="12">
+            <img
+              src="https://i.pinimg.com/1200x/cd/3f/6b/cd3f6ba58747a6de7bd042add7dcbbcf.jpg"
+              alt="Jorge"
+            />
+          </div>
+          <div class="team-info">
+            <span class="team-position"> GERENTE </span>
+            <h3>Jorge</h3>
+            <p class="team-role">Gestión del Proyecto</p>
+            <p>Coordina tareas, tiempos y estructura del desarrollo de la plataforma.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="about-final parallax-glow" appParallax>
+    <div class="final-content">
+      <span class="section-tag"> JJC GAMING </span>
+      <h2>
+        Construimos una experiencia
+        <span>para disfrutar</span>
+      </h2>
+      <p>Un proyecto académico desarrollado con pasión por la tecnología y los videojuegos.</p>
+      <a routerLink="/catalogo" class="about-btn about-btn-primary"> Explorar plataforma </a>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,94 @@
+﻿<section class="auth-page container">
+  <div class="auth-layout registration">
+    <aside class="auth-art" appParallax>
+      <a class="auth-brand" routerLink="/"><app-icon name="game" />JJC GAMING</a>
+      <div>
+        <span class="eyebrow">LA AVENTURA COMIENZA CONTIGO</span>
+        <h2>Un nuevo mundo.<br />Tu propia historia.</h2>
+        <p>Crea tu cuenta y encuentra ese juego que no puedes dejar pasar.</p>
+        <span class="art-caption">TU PRÓXIMO NIVEL EMPIEZA AQUÍ</span>
+      </div>
+    </aside>
+    <div class="auth-form-panel">
+      <form class="login-card" [formGroup]="form" (ngSubmit)="register()">
+        <span class="eyebrow">BIENVENIDO A JJC GAMING</span>
+        <h1>Crea tu cuenta</h1>
+        <p>El primer paso de tu próxima aventura.</p>
+        <div class="fields">
+          <label
+            >Nombre<input
+              formControlName="nombre"
+              autocomplete="given-name"
+              placeholder="Tu nombre" /></label
+          ><label
+            >Apellido<input
+              formControlName="apellido"
+              autocomplete="family-name"
+              placeholder="Tu apellido"
+          /></label>
+        </div>
+        <label
+          >Correo electrónico<input
+            type="email"
+            formControlName="correo"
+            autocomplete="email"
+            placeholder="tu@correo.com" /></label
+        ><label
+          >Teléfono <span class="optional">(opcional)</span
+          ><input
+            type="tel"
+            formControlName="telefono"
+            autocomplete="tel"
+            placeholder="Tu número de teléfono" /></label
+        ><label
+          >Contraseña
+          <div class="password-field">
+            <input
+              [type]="showPassword() ? 'text' : 'password'"
+              formControlName="password"
+              autocomplete="new-password"
+              placeholder="Al menos 6 caracteres"
+            /><button
+              type="button"
+              class="password-toggle"
+              (click)="showPassword.set(!showPassword())"
+              [attr.aria-pressed]="showPassword()"
+              [attr.aria-label]="showPassword() ? 'Ocultar contraseñas' : 'Mostrar contraseñas'"
+            >
+              <app-icon name="eye" />
+            </button></div></label
+        ><label
+          >Confirmar contraseña<input
+            [type]="showPassword() ? 'text' : 'password'"
+            formControlName="confirmPassword"
+            autocomplete="new-password"
+            placeholder="Repite tu contraseña"
+        /></label>
+        @if (form.touched && form.invalid) {
+          <p class="error" role="alert">
+            Nombre y apellido son obligatorios. Ingresa un correo válido y una contraseña de al
+            menos 6 caracteres.
+          </p>
+          @if (form.hasError('passwordsMismatch')) {
+            <p class="error" role="alert">Las contraseñas deben coincidir.</p>
+          }
+        }
+        @if (auth.error()) {
+          <p class="error" role="alert">{{ auth.error() }}</p>
+        }
+        @if (message()) {
+          <p class="notice" role="status">{{ message() }}</p>
+        }
+        <button type="submit" class="auth-submit" [disabled]="submitting()">
+          {{ submitting() ? 'Registrando…' : 'Crear cuenta' }}<app-icon name="arrow" />
+        </button>
+        @if (auth.isAuthenticated()) {
+          <a class="text-link" [routerLink]="auth.isAdmin() ? '/admin' : '/'"
+            >Continuar <app-icon name="arrow"
+          /></a>
+        }
+        <p class="auth-switch">¿Ya tienes cuenta? <a routerLink="/login">Inicia sesión</a></p>
+      </form>
+    </div>
+  </div>
+</section>
